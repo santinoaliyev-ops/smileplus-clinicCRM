@@ -14,12 +14,21 @@ export interface PatientProfile {
   id: string;
   fullName: string | null;
   phone: string;
+  email: string | null;
+  finCode: string | null;
   birthDate: string | null;
   gender: string | null;
   medicalCard: {
     bloodType: string | null;
     allergies: string[] | null;
     chronicConditions: string[] | null;
+    diabetes: boolean | null;
+    pregnancy: boolean | null;
+    pacemaker: boolean | null;
+    anticoagulants: boolean | null;
+    hepatitis: boolean | null;
+    hiv: boolean | null;
+    peculiarities: string | null;
     notes: string | null;
   };
   subscription: {
@@ -62,12 +71,21 @@ class PatientProfileService {
       id: p.id,
       fullName: p.full_name ?? null,
       phone: p.phone,
+      email: p.email ?? null,
+      finCode: p.fin_code ?? null,
       birthDate: p.birth_date ?? null,
       gender: p.gender ?? null,
       medicalCard: {
         bloodType: p.blood_type ?? null,
         allergies: p.allergies ?? null,
         chronicConditions: p.chronic_conditions ?? null,
+        diabetes: p.diabetes ?? null,
+        pregnancy: p.pregnancy ?? null,
+        pacemaker: p.pacemaker ?? null,
+        anticoagulants: p.anticoagulants ?? null,
+        hepatitis: p.hepatitis ?? null,
+        hiv: p.hiv ?? null,
+        peculiarities: p.peculiarities ?? null,
         notes: p.medical_notes ?? null,
       },
       subscription: sub

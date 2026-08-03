@@ -103,6 +103,34 @@ class AppointmentsService {
     if (error) throw error;
     return (count ?? 0) > 0;
   }
+
+  /** Ближайший будущий приём пациента (для шапки карточки пациента) */
+  async getNextAppointment(patientId: string): Promise<{
+    id: string;
+    scheduledAt: string;
+    doctorName: string | null;
+  } | null> {
+    const { data, error } = await supabase
+      .from("appointments")
+      .select("id, scheduled_at, doctors ( clinic_staff ( full_name ) )")
+      .eq("user_id", patientId)
+      .gte("scheduled_at", new Date().toISOString())
+      .not("status", "in", '("cancelled","no_show","completed")')
+      .order("scheduled_at", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) return null;
+
+    return {
+      id: data.id,
+      scheduledAt: data.scheduled_at,
+      doctorName:
+        (data.doctors as { clinic_staff?: { full_name?: string } } | null)
+          ?.clinic_staff?.full_name ?? null,
+    };
+  }
 }
 
 export const appointmentsService = new AppointmentsService();

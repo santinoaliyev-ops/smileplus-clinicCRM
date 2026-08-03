@@ -16,7 +16,8 @@
     "comingSoon": "Скоро",
     "cancel": "Отменить",
     "back": "Назад",
-    "close": "Закрыть"
+    "close": "Закрыть",
+    "more": "Ещё"
   },
   "doctorDesk": {
     "title": "Рабочий стол врача",
@@ -215,7 +216,52 @@
     "foreignVisit": "Приём другого врача — детали недоступны",
     "visitDetail": "Детали приёма",
     "remaining": "остаток",
-    "loadError": "Не удалось загрузить карточку пациента"
+    "loadError": "Не удалось загрузить карточку пациента",
+    "addPhoto": "Добавить фото",
+    "addXray": "Добавить рентген",
+    "age": "Возраст",
+    "anticoagulants": "Антикоагулянты",
+    "attendingDoctor": "Лечащий врач",
+    "backToList": "Назад к списку пациентов",
+    "birthDate": "Дата рождения",
+    "bookPatient": "Записать пациента",
+    "coveredBySubscription": "Покрытие подпиской",
+    "diabetes": "Диабет",
+    "email": "Email",
+    "filesComingSoon": "Загрузка файлов появится в одном из следующих обновлений",
+    "finCode": "FIN",
+    "finance": "Финансы",
+    "financeUnavailable": "Финансовые данные недоступны",
+    "gender": "Пол",
+    "genderFemale": "Женский",
+    "genderMale": "Мужской",
+    "hepatitis": "Гепатит",
+    "hiv": "ВИЧ",
+    "invoiceHistory": "История счетов",
+    "lastVisit": "Последний приём",
+    "newAppointment": "Новый приём",
+    "nextVisit": "Следующий приём",
+    "noProcedures": "Процедур не было",
+    "pacemaker": "Кардиостимулятор",
+    "paid": "Оплачено",
+    "peculiarities": "Особенности",
+    "phone": "Телефон",
+    "pregnancy": "Беременность",
+    "quickActions": "Быстрые действия",
+    "riskFactors": "Факторы риска",
+    "sendToCashier": "Отправить в кассу",
+    "subscription": "Подписка",
+    "subscriptionActive": "Активна",
+    "subscriptionExpired": "Истекла",
+    "totalInvoices": "Всего счетов",
+    "unpaid": "Не оплачено",
+    "until": "до",
+    "files": {
+      "photos": "Фото",
+      "xray": "Рентген",
+      "ct": "КТ",
+      "documents": "Документы"
+    }
   },
   "observation": {
     "title": "Наблюдение",
@@ -247,7 +293,15 @@
     "tooth": "Зуб",
     "noEvents": "История пуста",
     "treatment": "Лечение",
-    "diagnosis": "Наблюдение"
+    "diagnosis": "Наблюдение",
+    "addTreatment": "Лечение",
+    "filesComingSoon": "Загрузка файлов появится позже",
+    "tabs": {
+      "history": "История",
+      "photos": "Фото",
+      "procedures": "Процедуры",
+      "xray": "Рентген"
+    }
   },
   "treatmentPlan": {
     "title": "Планы лечения",
@@ -274,7 +328,10 @@
       "archived": "В архиве"
     },
     "selectPlanHint": "Выберите план слева или создайте новый",
-    "openPage": "Открыть план лечения"
+    "openPage": "Открыть план лечения",
+    "itemDone": "Выполнено",
+    "itemPending": "Ожидает",
+    "itemPlanned": "Запланирована"
   },
   "patientList": {
     "title": "Медкарты",

@@ -16,7 +16,8 @@
     "comingSoon": "Coming Soon",
     "cancel": "Cancel",
     "close": "Close",
-    "back": "Back"
+    "back": "Back",
+    "more": "More"
   },
   "doctorDesk": {
     "title": "Doctor's desk",
@@ -215,7 +216,52 @@
     "foreignVisit": "Another doctor's visit — details unavailable",
     "visitDetail": "Visit details",
     "remaining": "remaining",
-    "loadError": "Failed to load patient card"
+    "loadError": "Failed to load patient card",
+    "addPhoto": "Add photo",
+    "addXray": "Add X-ray",
+    "age": "Age",
+    "anticoagulants": "Anticoagulants",
+    "attendingDoctor": "Attending doctor",
+    "backToList": "Back to patient list",
+    "birthDate": "Date of birth",
+    "bookPatient": "Book patient",
+    "coveredBySubscription": "Covered by subscription",
+    "diabetes": "Diabetes",
+    "email": "Email",
+    "filesComingSoon": "File uploads are coming in a future update",
+    "finCode": "FIN",
+    "finance": "Finance",
+    "financeUnavailable": "Finance data unavailable",
+    "gender": "Gender",
+    "genderFemale": "Female",
+    "genderMale": "Male",
+    "hepatitis": "Hepatitis",
+    "hiv": "HIV",
+    "invoiceHistory": "Invoice history",
+    "lastVisit": "Last visit",
+    "newAppointment": "New appointment",
+    "nextVisit": "Next visit",
+    "noProcedures": "No procedures",
+    "pacemaker": "Pacemaker",
+    "paid": "Paid",
+    "peculiarities": "Peculiarities",
+    "phone": "Phone",
+    "pregnancy": "Pregnancy",
+    "quickActions": "Quick actions",
+    "riskFactors": "Risk factors",
+    "sendToCashier": "Send to cashier",
+    "subscription": "Subscription",
+    "subscriptionActive": "Active",
+    "subscriptionExpired": "Expired",
+    "totalInvoices": "Total invoices",
+    "unpaid": "Unpaid",
+    "until": "until",
+    "files": {
+      "photos": "Photos",
+      "xray": "X-ray",
+      "ct": "CT",
+      "documents": "Documents"
+    }
   },
   "observation": {
     "title": "Observation",
@@ -247,7 +293,15 @@
     "tooth": "Tooth",
     "noEvents": "No history",
     "treatment": "Treatment",
-    "diagnosis": "Observation"
+    "diagnosis": "Observation",
+    "addTreatment": "Treatment",
+    "filesComingSoon": "File uploads are coming later",
+    "tabs": {
+      "history": "History",
+      "photos": "Photos",
+      "procedures": "Procedures",
+      "xray": "X-ray"
+    }
   },
   "treatmentPlan": {
     "title": "Treatment plans",
@@ -274,7 +328,10 @@
       "archived": "Archived"
     },
     "selectPlanHint": "Select a plan on the left or create a new one",
-    "openPage": "Open treatment plan"
+    "openPage": "Open treatment plan",
+    "itemDone": "Done",
+    "itemPending": "Pending",
+    "itemPlanned": "Planned"
   },
   "patientList": {
     "title": "Patient records",

@@ -45,7 +45,46 @@ export interface CreatedInvoice {
   patientAmount: number;
 }
 
+export interface PatientFinanceSummary {
+  invoiceCount: number;
+  totalAmount: number;
+  paidAmount: number;
+  unpaidAmount: number;
+  coveredAmount: number;
+}
+
+const num = (v: unknown): number =>
+  typeof v === "number" ? v : typeof v === "string" ? parseFloat(v) || 0 : 0;
+
 class InvoiceService {
+  /** Финансовая сводка по пациенту для карточки пациента */
+  async getPatientFinanceSummary(patientId: string): Promise<PatientFinanceSummary> {
+    const { data, error } = await supabase
+      .from("invoices")
+      .select("status, total_amount, covered_amount, patient_amount")
+      .eq("user_id", patientId);
+
+    if (error) throw error;
+
+    const rows = data ?? [];
+    const totalAmount = rows.reduce((s, r) => s + num(r.total_amount), 0);
+    const coveredAmount = rows.reduce((s, r) => s + num(r.covered_amount), 0);
+    const paidAmount = rows
+      .filter((r) => r.status === "paid")
+      .reduce((s, r) => s + num(r.patient_amount), 0);
+    const unpaidAmount = rows
+      .filter((r) => r.status !== "paid")
+      .reduce((s, r) => s + num(r.patient_amount), 0);
+
+    return {
+      invoiceCount: rows.length,
+      totalAmount,
+      paidAmount,
+      unpaidAmount,
+      coveredAmount,
+    };
+  }
+
   async getClinicProcedures(
     clinicId: string,
     userId: string

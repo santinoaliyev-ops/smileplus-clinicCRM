@@ -13,6 +13,7 @@ interface Props {
   selected: number[];
   onChange: (selected: number[]) => void;
   readOnly?: boolean;
+  hideBulkActions?: boolean;
 }
 
 const LEGEND_ITEMS = [
@@ -25,7 +26,7 @@ const LEGEND_ITEMS = [
   { color: "#8b5cf6", code: "ARTIFICIAL" },
 ] as const;
 
-export function ToothChart({ teeth = [], selected, onChange, readOnly = false }: Props) {
+export function ToothChart({ teeth = [], selected, onChange, readOnly = false, hideBulkActions = false }: Props) {
   const { t } = useTranslation();
 
   const stateMap = new Map<number, ToothState>(
@@ -50,7 +51,7 @@ export function ToothChart({ teeth = [], selected, onChange, readOnly = false }:
 
   return (
     <div className="select-none rounded-2xl bg-white p-4 shadow-sm">
-      {!readOnly && (
+      {!readOnly && !hideBulkActions && (
         <div className="mb-3 flex items-center gap-2">
           <button onClick={selectAll}   className="rounded-lg border border-gray-200 px-2.5 py-1 text-xs text-gray-600 hover:bg-gray-50">{t("toothChart.allTeeth")}</button>
           <button onClick={selectUpper} className="rounded-lg border border-gray-200 px-2.5 py-1 text-xs text-gray-600 hover:bg-gray-50">{t("toothChart.upperJaw")}</button>
@@ -64,31 +65,31 @@ export function ToothChart({ teeth = [], selected, onChange, readOnly = false }:
       )}
 
       {/* Верхняя челюсть */}
-      <div className="mb-1 flex items-center gap-1">
+      <div className="mb-2 flex items-center justify-center gap-1">
         <span className="w-6 text-right text-[9px] text-gray-400">R</span>
         <ToothRow numbers={UPPER_RIGHT} {...rowProps} />
-        <div className="mx-1 h-8 w-px bg-gray-200" />
+        <div className="mx-1 h-10 w-px bg-gray-200" />
         <ToothRow numbers={UPPER_LEFT} {...rowProps} />
         <span className="w-6 text-[9px] text-gray-400">L</span>
       </div>
 
-      <div className="mx-7 my-2 h-px bg-gray-200" />
+      <div className="mx-auto my-2 h-px w-2/3 bg-gray-200" />
 
       {/* Нижняя челюсть */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center justify-center gap-1">
         <span className="w-6 text-right text-[9px] text-gray-400">R</span>
         <ToothRow numbers={LOWER_RIGHT} {...rowProps} />
-        <div className="mx-1 h-8 w-px bg-gray-200" />
+        <div className="mx-1 h-10 w-px bg-gray-200" />
         <ToothRow numbers={LOWER_LEFT} {...rowProps} />
         <span className="w-6 text-[9px] text-gray-400">L</span>
       </div>
 
       {/* Легенда */}
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="mt-4 flex flex-wrap justify-center gap-3 border-t border-gray-50 pt-3">
         {LEGEND_ITEMS.map(({ color, code }) => (
-          <div key={code} className="flex items-center gap-1">
+          <div key={code} className="flex items-center gap-1.5">
             <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color }} />
-            <span className="text-[9px] text-gray-500">{t(`toothChart.conditions.${code}`)}</span>
+            <span className="text-[10px] text-gray-500">{t(`toothChart.conditions.${code}`)}</span>
           </div>
         ))}
       </div>

@@ -16,7 +16,8 @@
     "years_old": "{{count}} yaş",
     "cancel": "Ləğv et",
     "close": "Bağla",
-    "back": "Geri"
+    "back": "Geri",
+    "more": "Daha"
   },
   "doctorDesk": {
     "title": "Həkimin iş masası",
@@ -215,7 +216,52 @@
     "foreignVisit": "Başqa həkimin qəbulu — detallar əlçatan deyil",
     "visitDetail": "Qəbul detalları",
     "remaining": "qalıq",
-    "loadError": "Pasiyent kartını yükləmək alınmadı"
+    "loadError": "Pasiyent kartını yükləmək alınmadı",
+    "addPhoto": "Foto əlavə et",
+    "addXray": "Rentgen əlavə et",
+    "age": "Yaş",
+    "anticoagulants": "Antikoaqulyantlar",
+    "attendingDoctor": "Həkim",
+    "backToList": "Pasiyent siyahısına",
+    "birthDate": "Doğum tarixi",
+    "bookPatient": "Pasiyenti yaz",
+    "coveredBySubscription": "Abunə ilə ödənilib",
+    "diabetes": "Diabet",
+    "email": "E-poçt",
+    "filesComingSoon": "Fayl yükləmə tezliklə əlavə olunacaq",
+    "finCode": "FIN",
+    "finance": "Maliyyə",
+    "financeUnavailable": "Maliyyə məlumatı əlçatan deyil",
+    "gender": "Cins",
+    "genderFemale": "Qadın",
+    "genderMale": "Kişi",
+    "hepatitis": "Hepatit",
+    "hiv": "QİÇS",
+    "invoiceHistory": "Hesab tarixçəsi",
+    "lastVisit": "Son qəbul",
+    "newAppointment": "Yeni qəbul",
+    "nextVisit": "Növbəti qəbul",
+    "noProcedures": "Prosedur olmayıb",
+    "pacemaker": "Ürək stimulyatoru",
+    "paid": "Ödənilib",
+    "peculiarities": "Xüsusiyyətlər",
+    "phone": "Telefon",
+    "pregnancy": "Hamiləlik",
+    "quickActions": "Sürətli əməliyyatlar",
+    "riskFactors": "Risk faktorları",
+    "sendToCashier": "Kassaya göndər",
+    "subscription": "Abunə",
+    "subscriptionActive": "Aktiv",
+    "subscriptionExpired": "Bitib",
+    "totalInvoices": "Bütün hesablar",
+    "unpaid": "Ödənilməyib",
+    "until": "bitmə tarixi",
+    "files": {
+      "photos": "Foto",
+      "xray": "Rentgen",
+      "ct": "KT",
+      "documents": "Sənədlər"
+    }
   },
   "observation": {
     "title": "Müşahidə",
@@ -247,7 +293,15 @@
     "tooth": "Diş",
     "noEvents": "Tarixçə yoxdur",
     "treatment": "Müalicə",
-    "diagnosis": "Müşahidə"
+    "diagnosis": "Müşahidə",
+    "addTreatment": "Müalicə",
+    "filesComingSoon": "Fayl yükləmə funksiyası tezliklə əlavə olunacaq",
+    "tabs": {
+      "history": "Tarixçə",
+      "photos": "Foto",
+      "procedures": "Prosedurlar",
+      "xray": "Rentgen"
+    }
   },
   "treatmentPlan": {
     "title": "Müalicə planları",
@@ -274,7 +328,10 @@
       "archived": "Arxiv"
     },
     "selectPlanHint": "Soldan plan seçin və ya yeni yaradın",
-    "openPage": "Müalicə planını aç"
+    "openPage": "Müalicə planını aç",
+    "itemDone": "Yerinə yetirilib",
+    "itemPending": "Gözləyir",
+    "itemPlanned": "Planlaşdırılıb"
   },
   "patientList": {
     "title": "Tibbi kartlar",
