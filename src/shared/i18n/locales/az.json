@@ -50,7 +50,9 @@
     "clinicalRecord": "Xidmət halı",
     "continuationOfTreatment": "Müalicənin davamı",
     "add": "Əlavə et",
-    "book": "Yaz"
+    "book": "Yaz",
+    "finishRequiresInvoice": "Əvvəlcə qəbula görə hesab göndərin",
+    "invoiceSent": "Hesab göndərilib"
   },
   "schedule": {
     "title": "Cədvəl",
@@ -202,18 +204,18 @@
     "paymentError": "Ödəniş alınmadı"
   },
   "patientCard": {
-    "toothChart": "Зубная формула",
-    "medicalCard": "Медкарта",
-    "bloodType": "Группа крови",
-    "allergies": "Аллергии",
-    "chronic": "Хронические заболевания",
-    "visitHistory": "История приёмов",
-    "noVisits": "Приёмов не было",
-    "ownVisit": "Мой приём",
-    "foreignVisit": "Приём другого врача — детали недоступны",
-    "visitDetail": "Детали приёма",
-    "remaining": "остаток",
-    "loadError": "Не удалось загрузить карточку пациента"
+    "toothChart": "Diş formulası",
+    "medicalCard": "Tibbi karta",
+    "bloodType": "Qan qrupu",
+    "allergies": "Allergiyalar",
+    "chronic": "Xroniki xəstəliklər",
+    "visitHistory": "Qəbul tarixçəsi",
+    "noVisits": "Qəbul olmayıb",
+    "ownVisit": "Mənim qəbulum",
+    "foreignVisit": "Başqa həkimin qəbulu — detallar əlçatan deyil",
+    "visitDetail": "Qəbul detalları",
+    "remaining": "qalıq",
+    "loadError": "Pasiyent kartını yükləmək alınmadı"
   },
   "observation": {
     "title": "Müşahidə",
@@ -264,6 +266,38 @@
     "backToList": "Siyahıya",
     "empty": "Plan yoxdur",
     "emptyItems": "Ən azı bir prosedur əlavə edin",
-    "createError": "Plan yaradılmadı"
+    "createError": "Plan yaradılmadı",
+    "statuses": {
+      "draft": "Qaralama",
+      "active": "Aktiv",
+      "completed": "Tamamlandı",
+      "archived": "Arxiv"
+    },
+    "selectPlanHint": "Soldan plan seçin və ya yeni yaradın",
+    "openPage": "Müalicə planını aç"
+  },
+  "patientList": {
+    "title": "Tibbi kartlar",
+    "count": "{{count}} pasiyent",
+    "searchPlaceholder": "Ad, telefon və ya FIN kod…",
+    "empty": "Bu klinikada hələ pasiyent qəbulunuz olmayıb",
+    "noResults": "Heç kim tapılmadı"
+  },
+  "settings": {
+    "title": "Tənzimləmələr",
+    "language": "Dil",
+    "account": "Hesab",
+    "fullName": "Ad",
+    "email": "E-poçt",
+    "phone": "Telefon",
+    "role": "Rol",
+    "clinic": "Klinika"
+  },
+  "roles": {
+    "doctor": "Həkim",
+    "receptionist": "Administrator",
+    "manager": "Direktor",
+    "cashier": "Kassir",
+    "accountant": "Mühasib"
   }
 }

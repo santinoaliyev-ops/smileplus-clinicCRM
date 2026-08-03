@@ -1,11 +1,10 @@
 import { app, BrowserWindow } from "electron";
 import { createWindow } from "./createWindow.js";
-let mainWindow = null;
 app.whenReady().then(() => {
-    mainWindow = createWindow();
+    createWindow();
     app.on("activate", () => {
         if (BrowserWindow.getAllWindows().length === 0) {
-            mainWindow = createWindow();
+            createWindow();
         }
     });
 });

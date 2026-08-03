@@ -4,12 +4,11 @@ import { useTranslation } from "react-i18next";
 
 import { usePatientProfile } from "@/features/patient-card/hooks/usePatientProfile";
 import { usePatientTeeth } from "@/features/doctor-dashboard/hooks/usePatientTeeth";
-import { ToothChart } from "@/shared/ui/tooth-chart";
+import { CompactToothBar } from "@/pages/invoice/CompactToothBar";
 import { getAge } from "@/features/doctor-dashboard/lib/desk-utils";
 import { VisitDetailDialog } from "./VisitDetailDialog";
 import { ObservationDialog } from "./ObservationDialog";
 import { ToothHistoryPanel } from "./ToothHistoryPanel";
-import { TreatmentPlansPanel } from "./TreatmentPlansPanel";
 
 export function PatientCardPage() {
   const { patientId } = useParams<{ patientId: string }>();
@@ -19,7 +18,6 @@ export function PatientCardPage() {
   const [openVisitId, setOpenVisitId] = useState<string | null>(null);
   const [selectedTooth, setSelectedTooth] = useState<number | null>(null);
   const [observeDialogOpen, setObserveDialogOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"visits" | "plans">("visits");
 
   const { data: profile, isLoading, error } = usePatientProfile(patientId);
   const { data: teeth = [] } = usePatientTeeth(patientId);
@@ -50,63 +48,55 @@ export function PatientCardPage() {
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-slate-50">
-      {/* Шапка */}
-      <header className="flex shrink-0 items-center gap-4 border-b border-gray-200 bg-white px-5 py-3">
+      {/* Шапка: пациент + зубная формула в одну строку */}
+      <header className="flex shrink-0 items-center gap-4 border-b border-gray-200 bg-white px-4 py-2">
         <button
           onClick={() => navigate(-1)}
-          className="rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-gray-600 hover:bg-gray-50"
+          className="shrink-0 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-gray-600 hover:bg-gray-50"
         >
-          ← {t("common.back")}
+          ←
         </button>
-        <div>
-          <h1 className="text-base font-bold text-gray-900">
-            {profile.fullName ?? profile.phone}
+
+        <div className="shrink-0">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-bold text-gray-900">
+              {profile.fullName ?? profile.phone}
+            </span>
             {age !== null && (
-              <span className="ml-2 text-sm font-normal text-gray-500">
+              <span className="text-xs text-gray-500">
                 ({t("common.years_old", { count: age })})
               </span>
             )}
-          </h1>
+            {profile.subscription && (
+              <span className="rounded-full bg-teal-100 px-2 py-0.5 text-[10px] font-semibold text-teal-700">
+                {profile.subscription.plan.toUpperCase()}
+                {" · "}
+                {profile.subscription.coverageLimit - profile.subscription.coverageUsed} ₼{" "}
+                {t("patientCard.remaining")}
+              </span>
+            )}
+          </div>
           <p className="text-xs text-gray-500">{profile.phone}</p>
         </div>
-        {profile.subscription && (
-          <div className="ml-auto rounded-xl bg-teal-50 px-4 py-2 text-sm">
-            <span className="font-semibold text-teal-700">
-              {profile.subscription.plan.toUpperCase()}
-            </span>
-            <span className="ml-3 text-gray-500">
-              {profile.subscription.coverageLimit -
-                profile.subscription.coverageUsed}{" "}
-              ₼ {t("patientCard.remaining")}
-            </span>
-          </div>
-        )}
+
+        <div className="flex-1 overflow-x-auto">
+          <CompactToothBar
+            teeth={teeth}
+            selected={selectedTooth ? [selectedTooth] : []}
+            onChange={(sel) => {
+              const last = sel[sel.length - 1];
+              if (last) {
+                setSelectedTooth(last);
+                setObserveDialogOpen(false);
+              }
+            }}
+          />
+        </div>
       </header>
 
       <div className="flex flex-1 gap-3 overflow-hidden p-3">
-        {/* Левая колонка: формула + история зуба + медкарта */}
-        <div className="flex w-96 shrink-0 flex-col gap-3 overflow-y-auto">
-          {/* Зубная формула */}
-          <div>
-            <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500">
-              {t("patientCard.toothChart")}
-              <span className="ml-2 font-normal normal-case text-gray-400">
-                {t("observation.hint")}
-              </span>
-            </p>
-            <ToothChart
-              teeth={teeth}
-              selected={selectedTooth ? [selectedTooth] : []}
-              onChange={(sel) => {
-                const last = sel[sel.length - 1];
-                if (last) {
-                  setSelectedTooth(last);
-                  setObserveDialogOpen(false);
-                }
-              }}
-            />
-          </div>
-
+        {/* Левая колонка: история зуба + медкарта */}
+        <div className="flex w-80 shrink-0 flex-col gap-3 overflow-y-auto">
           {/* История зуба */}
           {selectedTooth && (
             <ToothHistoryPanel
@@ -172,41 +162,27 @@ export function PatientCardPage() {
           </div>
         </div>
 
-        {/* Правая колонка: табы — история приёмов / планы лечения */}
+        {/* Правая колонка: история приёмов + переход к планам лечения */}
         <div className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-white shadow-sm">
-          {/* Табы */}
-          <div className="flex shrink-0 border-b border-gray-100">
-            <button
-              onClick={() => setActiveTab("visits")}
-              className={`px-4 py-3 text-sm font-medium transition ${
-                activeTab === "visits"
-                  ? "border-b-2 border-teal-600 text-teal-700"
-                  : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
+          <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-4 py-3">
+            <span className="text-sm font-medium text-teal-700">
               {t("patientCard.visitHistory")} ({profile.visits.length})
-            </button>
+            </span>
             <button
-              onClick={() => setActiveTab("plans")}
-              className={`px-4 py-3 text-sm font-medium transition ${
-                activeTab === "plans"
-                  ? "border-b-2 border-teal-600 text-teal-700"
-                  : "text-gray-500 hover:text-gray-700"
-              }`}
+              onClick={() => navigate(`/doctor/treatment-plan/${patientId}`)}
+              className="flex items-center gap-1.5 rounded-lg border border-teal-300 bg-teal-50 px-3 py-1.5 text-sm font-medium text-teal-700 transition hover:bg-teal-100"
             >
-              {t("treatmentPlan.title")}
+              {t("treatmentPlan.openPage")} →
             </button>
           </div>
 
-          {/* Контент таба */}
-          {activeTab === "visits" ? (
-            <div className="flex-1 overflow-y-auto">
-              {profile.visits.length === 0 ? (
-                <div className="p-6 text-center text-sm text-gray-400">
-                  {t("patientCard.noVisits")}
-                </div>
-              ) : (
-                profile.visits.map((v) => (
+          <div className="flex-1 overflow-y-auto">
+            {profile.visits.length === 0 ? (
+              <div className="p-6 text-center text-sm text-gray-400">
+                {t("patientCard.noVisits")}
+              </div>
+            ) : (
+              profile.visits.map((v) => (
                   <button
                     key={v.appointmentId}
                     onClick={() => v.isOwn && setOpenVisitId(v.appointmentId)}
@@ -255,14 +231,9 @@ export function PatientCardPage() {
                     </div>
                     {v.isOwn && <span className="text-gray-300">›</span>}
                   </button>
-                ))
-              )}
-            </div>
-          ) : (
-            <div className="flex-1 overflow-y-auto p-3">
-              <TreatmentPlansPanel patientId={patientId!} />
-            </div>
-          )}
+              ))
+            )}
+          </div>
         </div>
       </div>
 

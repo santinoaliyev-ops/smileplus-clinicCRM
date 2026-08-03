@@ -3,14 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/app/providers/auth";
 import { useClinic } from "@/app/providers/clinic";
+import { UserRole } from "@/shared/types/auth";
 import { PatientSearchBox } from "./PatientSearchBox";
-
-const NAV_ITEMS = [
-  { icon: "🦷", key: "desk",     path: "/doctor",   active: true },
-  { icon: "📅", key: "schedule", path: "/schedule", active: true },
-  { icon: "🧾", key: "invoices", path: null,        active: false },
-  { icon: "📊", key: "reports",  path: null,        active: false },
-];
 
 export function DoctorDeskLayout({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
@@ -19,6 +13,18 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const isDoctor = clinic?.role === UserRole.Doctor;
+
+  const navItems = [
+    { icon: "🦷", key: "desk",     path: "/doctor",   active: true,     title: t("doctorDesk.title") },
+    { icon: "📅", key: "schedule", path: "/schedule", active: true,     title: t("schedule.title") },
+    { icon: "🗂️", key: "patients", path: "/patients", active: isDoctor, title: t("patientList.title") },
+    { icon: "🧾", key: "invoices", path: null,        active: false,    title: t("common.comingSoon") },
+    { icon: "📊", key: "reports",  path: null,        active: false,    title: t("common.comingSoon") },
+  ];
+
+  const isSettingsActive = location.pathname === "/settings";
+
   return (
     <div className="flex h-screen bg-slate-50">
       {/* Сайдбар */}
@@ -26,14 +32,14 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
         <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-teal-600 text-sm font-bold text-white">
           S+
         </div>
-        {NAV_ITEMS.map((item) => {
+        {navItems.map((item) => {
           const isActive = item.path && location.pathname === item.path;
           return (
             <button
               key={item.key}
               onClick={() => item.path && navigate(item.path)}
               disabled={!item.active}
-              title={!item.active ? t("common.comingSoon") : undefined}
+              title={item.title}
               className={`flex h-11 w-11 items-center justify-center rounded-xl text-xl transition ${
                 isActive
                   ? "bg-teal-600 text-white ring-1 ring-teal-700"
@@ -46,6 +52,18 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
             </button>
           );
         })}
+
+        <button
+          onClick={() => navigate("/settings")}
+          title={t("settings.title")}
+          className={`mt-auto flex h-11 w-11 items-center justify-center rounded-xl text-xl transition ${
+            isSettingsActive
+              ? "bg-teal-600 text-white ring-1 ring-teal-700"
+              : "bg-teal-50 text-teal-600 ring-1 ring-teal-200 hover:bg-teal-100 cursor-pointer"
+          }`}
+        >
+          ⚙️
+        </button>
       </nav>
 
       <div className="flex flex-1 flex-col overflow-hidden">
@@ -69,7 +87,7 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
                 {user?.account.fullName}
               </div>
               <div className="text-xs text-gray-500">
-                {t("doctorDesk.roleLabel")}
+                {clinic ? t(`roles.${clinic.role}`) : t("doctorDesk.roleLabel")}
               </div>
             </div>
             <button

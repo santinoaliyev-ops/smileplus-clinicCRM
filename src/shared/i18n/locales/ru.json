@@ -50,7 +50,9 @@
     "clinicalRecord": "Случай обслуживания",
     "continuationOfTreatment": "Продолжение лечения",
     "add": "Добавить",
-    "book": "Записать"
+    "book": "Записать",
+    "finishRequiresInvoice": "Сначала выставите счёт за приём",
+    "invoiceSent": "Счёт выставлен"
   },
   "schedule": {
     "title": "Расписание",
@@ -264,6 +266,38 @@
     "backToList": "К списку",
     "empty": "Планов нет",
     "emptyItems": "Добавьте хотя бы одну процедуру",
-    "createError": "Не удалось создать план"
+    "createError": "Не удалось создать план",
+    "statuses": {
+      "draft": "Черновик",
+      "active": "В работе",
+      "completed": "Завершён",
+      "archived": "В архиве"
+    },
+    "selectPlanHint": "Выберите план слева или создайте новый",
+    "openPage": "Открыть план лечения"
+  },
+  "patientList": {
+    "title": "Медкарты",
+    "count": "{{count}} пациентов",
+    "searchPlaceholder": "Имя, телефон или ФИН-код…",
+    "empty": "У вас пока не было приёмов с пациентами в этой клинике",
+    "noResults": "Никого не найдено"
+  },
+  "settings": {
+    "title": "Настройки",
+    "language": "Язык",
+    "account": "Аккаунт",
+    "fullName": "Имя",
+    "email": "Email",
+    "phone": "Телефон",
+    "role": "Роль",
+    "clinic": "Клиника"
+  },
+  "roles": {
+    "doctor": "Врач",
+    "receptionist": "Администратор",
+    "manager": "Директор",
+    "cashier": "Кассир",
+    "accountant": "Бухгалтер"
   }
 }

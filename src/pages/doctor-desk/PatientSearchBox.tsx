@@ -20,11 +20,11 @@ export function PatientSearchBox() {
     }
     const id = setTimeout(async () => {
       const q = query.trim();
-      const isPhone = /^\+?\d{9,}$/.test(q.replace(/[\s-]/g, ""));
+      const isPhone = /^\+?\d{9,}$/.test(q.replace(/[^\d+]/g, ""));
       try {
         if (isPhone) {
           const found = await patientsService.searchByPhone(
-            q.replace(/[\s-]/g, "")
+            q.replace(/[^\d+]/g, "")
           );
           setResults(found ? [found] : []);
         } else {

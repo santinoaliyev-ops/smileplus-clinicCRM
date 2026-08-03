@@ -1,0 +1,1 @@
+export { TreatmentPlanPage } from "./TreatmentPlanPage";

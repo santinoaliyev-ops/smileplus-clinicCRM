@@ -92,6 +92,17 @@ class InvoiceService {
     };
   }
 
+  /** Есть ли у приёма хотя бы один выставленный счёт (для блокировки завершения приёма без счёта) */
+  async hasInvoice(appointmentId: string): Promise<boolean> {
+    const { count, error } = await supabase
+      .from("invoices")
+      .select("id", { count: "exact", head: true })
+      .eq("appointment_id", appointmentId);
+
+    if (error) throw error;
+    return (count ?? 0) > 0;
+  }
+
   async create(input: CreateInvoiceInput): Promise<CreatedInvoice> {
     const { data, error } = await supabase.functions.invoke("invoice-create", {
       body: {

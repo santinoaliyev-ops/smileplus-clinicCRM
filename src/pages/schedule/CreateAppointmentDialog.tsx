@@ -46,10 +46,10 @@ export function CreateAppointmentDialog({ doctor, day, time, preselectPatientId,
     if (patient || query.trim().length < 3) return;
     const id = setTimeout(async () => {
       const q = query.trim();
-      const isPhone = /^\+?\d{9,}$/.test(q.replace(/[\s-]/g, ""));
+      const isPhone = /^\+?\d{9,}$/.test(q.replace(/[^\d+]/g, ""));
       try {
         if (isPhone) {
-          const found = await patientsService.searchByPhone(q.replace(/[\s-]/g, ""));
+          const found = await patientsService.searchByPhone(q.replace(/[^\d+]/g, ""));
           setResults(found ? [found] : []);
         } else {
           setResults(await patientsService.searchByName(q));

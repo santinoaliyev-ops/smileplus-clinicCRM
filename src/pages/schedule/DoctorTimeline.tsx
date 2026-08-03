@@ -78,14 +78,18 @@ export function DoctorTimeline({ appointments, exceptions, day, onSelect, onSlot
           className="relative border-t border-gray-100"
           style={{ height: 60 * PX_PER_MINUTE }}
         >
-          <span className="absolute -top-3 left-0 bg-white pr-3 text-sm font-bold text-gray-500">
+          <span className="absolute -top-2 left-0 bg-white pr-2 text-xs font-bold text-gray-500">
             {String(h).padStart(2, "0")}:00
           </span>
+          <div
+            className="absolute inset-x-0 border-t border-dashed border-gray-100"
+            style={{ top: 30 * PX_PER_MINUTE }}
+          />
         </div>
       ))}
 
       <div
-        className="absolute left-16 right-0 top-0 cursor-pointer"
+        className="absolute left-12 right-0 top-0 cursor-pointer"
         style={{ height: totalMinutes * PX_PER_MINUTE }}
         onClick={handleClick}
       >
@@ -114,26 +118,44 @@ export function DoctorTimeline({ appointments, exceptions, day, onSelect, onSlot
           const age = getAge(a.patient.birthDate);
           const style = STATUS_COLORS[a.status] ?? STATUS_COLORS.confirmed;
           const end = new Date(start.getTime() + a.durationMin * 60000);
+          const name = a.patient.fullName ?? a.patient.phone;
+          const startLabel = start.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
+          const endLabel = end.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
+          const cardHeight = Math.max(a.durationMin * PX_PER_MINUTE, 20);
+          const compact = cardHeight < 38;
 
           return (
             <button
               key={a.id}
               onClick={() => onSelect(a)}
-              className={`absolute left-1 right-1 overflow-hidden rounded-2xl border-l-4 px-4 py-3 text-left shadow-sm transition hover:shadow-md ${style.bg} ${style.border} ${style.text}`}
-              style={{
-                top: minutesFromStart * PX_PER_MINUTE,
-                height: Math.max(a.durationMin * PX_PER_MINUTE, 44),
-              }}
+              className={`absolute left-1 right-1 overflow-hidden rounded-lg border-l-[3px] text-left shadow-sm transition hover:shadow-md ${
+                compact ? "px-2 py-0.5" : "px-2.5 py-1"
+              } ${style.bg} ${style.border} ${style.text}`}
+              style={{ top: minutesFromStart * PX_PER_MINUTE, height: cardHeight }}
             >
-              <div className="truncate text-sm font-bold leading-tight">
-                {a.patient.fullName ?? a.patient.phone}
-                {age !== null && <span className="ml-1 font-normal opacity-70">({age})</span>}
-              </div>
-              <div className="truncate text-xs opacity-70 leading-tight">
-                {start.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
-                –{end.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
-                {a.arrivedAt && " ✓"}
-              </div>
+              {compact ? (
+                <div className="flex items-center justify-between gap-2 text-[11px] font-semibold leading-tight">
+                  <span className="truncate">
+                    {name}
+                    {age !== null && <span className="ml-1 font-normal opacity-70">({age})</span>}
+                  </span>
+                  <span className="shrink-0 font-normal opacity-70">
+                    {startLabel}
+                    {a.arrivedAt && " ✓"}
+                  </span>
+                </div>
+              ) : (
+                <>
+                  <div className="truncate text-xs font-bold leading-tight">
+                    {name}
+                    {age !== null && <span className="ml-1 font-normal opacity-70">({age})</span>}
+                  </div>
+                  <div className="truncate text-[11px] opacity-70 leading-tight">
+                    {startLabel}–{endLabel}
+                    {a.arrivedAt && " ✓"}
+                  </div>
+                </>
+              )}
             </button>
           );
         })}

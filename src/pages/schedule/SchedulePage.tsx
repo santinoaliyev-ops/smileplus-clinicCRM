@@ -123,8 +123,8 @@ export function SchedulePage() {
         <div className="flex flex-1 flex-col overflow-hidden">
           <div className="mb-1 flex shrink-0 items-center justify-between">
             <div>
-              <h1 className="text-3xl font-extrabold text-gray-900">{t("schedule.title")}</h1>
-              <p className="text-sm capitalize text-gray-400">{dateLabel}</p>
+              <h1 className="text-xl font-extrabold text-gray-900">{t("schedule.title")}</h1>
+              <p className="text-xs capitalize text-gray-400">{dateLabel}</p>
             </div>
             <div className="flex items-center gap-1">
               <button onClick={() => setDay((d) => addDays(d, -1))} className="rounded-xl px-2.5 py-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition">←</button>
@@ -147,7 +147,7 @@ export function SchedulePage() {
             </div>
           </div>
 
-          <div className="mt-3 flex-1 overflow-y-auto rounded-3xl border border-gray-100 bg-white px-5 py-4 shadow-sm">
+          <div className="mt-2 flex-1 overflow-y-auto rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm">
             {isLoading ? (
               <div className="p-10 text-center text-gray-400">{t("common.loading")}</div>
             ) : !selectedDoctor ? (

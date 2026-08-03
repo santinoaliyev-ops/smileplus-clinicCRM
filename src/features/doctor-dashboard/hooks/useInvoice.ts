@@ -16,6 +16,14 @@ export function useClinicProcedures(
   });
 }
 
+export function useAppointmentHasInvoice(appointmentId: string | undefined) {
+  return useQuery({
+    queryKey: ["appointment-has-invoice", appointmentId],
+    queryFn: () => invoiceService.hasInvoice(appointmentId!),
+    enabled: !!appointmentId,
+  });
+}
+
 export function useCreateInvoice() {
   const qc = useQueryClient();
   return useMutation({
@@ -24,6 +32,7 @@ export function useCreateInvoice() {
       // инвалидируем данные приёмов и инвойсов
       qc.invalidateQueries({ queryKey: ["doctor-day"] });
       qc.invalidateQueries({ queryKey: ["patient-summary"] });
+      qc.invalidateQueries({ queryKey: ["appointment-has-invoice"] });
     },
   });
 }

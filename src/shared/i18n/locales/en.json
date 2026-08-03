@@ -50,7 +50,9 @@
     "clinicalRecord": "Clinical record",
     "continuationOfTreatment": "Continuation of treatment",
     "add": "Add",
-    "book": "Book"
+    "book": "Book",
+    "finishRequiresInvoice": "Send the invoice before finishing the appointment",
+    "invoiceSent": "Invoice sent"
   },
   "schedule": {
     "title": "Schedule",
@@ -264,6 +266,38 @@
     "backToList": "Back to list",
     "empty": "No plans",
     "emptyItems": "Add at least one procedure",
-    "createError": "Failed to create plan"
+    "createError": "Failed to create plan",
+    "statuses": {
+      "draft": "Draft",
+      "active": "Active",
+      "completed": "Completed",
+      "archived": "Archived"
+    },
+    "selectPlanHint": "Select a plan on the left or create a new one",
+    "openPage": "Open treatment plan"
+  },
+  "patientList": {
+    "title": "Patient records",
+    "count": "{{count}} patients",
+    "searchPlaceholder": "Name, phone or FIN code…",
+    "empty": "You have not seen any patients in this clinic yet",
+    "noResults": "Nobody found"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "account": "Account",
+    "fullName": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "role": "Role",
+    "clinic": "Clinic"
+  },
+  "roles": {
+    "doctor": "Doctor",
+    "receptionist": "Receptionist",
+    "manager": "Manager",
+    "cashier": "Cashier",
+    "accountant": "Accountant"
   }
 }

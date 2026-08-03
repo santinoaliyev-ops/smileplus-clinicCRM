@@ -9,6 +9,9 @@ import { SchedulePage } from "@/pages/schedule";
 import { InvoicePage } from "@/pages/invoice";
 import { CashierPage } from "@/pages/cashier";
 import { PatientCardPage } from "@/pages/patient-card";
+import { TreatmentPlanPage } from "@/pages/treatment-plan";
+import { PatientListPage } from "@/pages/patient-list";
+import { SettingsPage } from "@/pages/settings";
 
 export default function App() {
   return (
@@ -20,7 +23,10 @@ export default function App() {
         <Route path="/doctor" element={<DoctorDeskPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/schedule" element={<SchedulePage />} />
+        <Route path="/patients" element={<PatientListPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route path="/doctor/invoice/:appointmentId" element={<InvoicePage />} />
+        <Route path="/doctor/treatment-plan/:patientId" element={<TreatmentPlanPage />} />
         <Route path="/cashier" element={<CashierPage />} />
         <Route path="/patient/:patientId" element={<PatientCardPage />} />
       </Route>

@@ -6,7 +6,6 @@ export interface TreatmentPlanItem {
   id: string;
   planId: string;
   procedureId: string;
-  procedureName: string;
   toothNumbers: number[];
   quantity: number;
   priceSnapshot: number;
@@ -36,7 +35,6 @@ export interface CreatePlanInput {
   notes?: string;
   items: {
     procedureId: string;
-    procedureName: string;
     toothNumbers: number[];
     quantity: number;
     priceSnapshot: number;
@@ -78,7 +76,6 @@ class TreatmentPlansService {
         id: it.id,
         planId: it.plan_id,
         procedureId: it.procedure_id,
-        procedureName: it.procedure_name ?? "—",
         toothNumbers: it.tooth_numbers ?? [],
         quantity: it.quantity ?? 1,
         priceSnapshot: num(it.price_snapshot),

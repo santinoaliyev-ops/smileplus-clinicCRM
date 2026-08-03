@@ -1,6 +1,6 @@
 export const DAY_START_HOUR = 9;
 export const DAY_END_HOUR = 19;
-export const PX_PER_MINUTE = 1.4;
+export const PX_PER_MINUTE = 1;
 export const SLOT_MINUTES = 30;
 
 export const STATUS_COLORS: Record<string, { bg: string; border: string; text: string }> = {
@@ -12,7 +12,7 @@ export const STATUS_COLORS: Record<string, { bg: string; border: string; text: s
   no_show:     { bg: "bg-red-50",    border: "border-red-400",    text: "text-red-700" },
 };
 
-// РР· ТЗ: пороги загрузки дня 20/80 + серый (выходной) + синий (только контрольные)
+// Из ТЗ: пороги загрузки дня 20/80 + серый (выходной) + синий (только контрольные)
 export type DayLoadColor = "gray" | "green" | "yellow" | "red" | "blue";
 
 export const DAY_LOAD_STYLES: Record<DayLoadColor, string> = {
