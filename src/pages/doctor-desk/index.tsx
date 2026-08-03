@@ -1,0 +1,1 @@
+export { DoctorDeskPage } from "./DoctorDeskPage";

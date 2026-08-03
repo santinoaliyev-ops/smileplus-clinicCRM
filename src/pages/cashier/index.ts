@@ -1,0 +1,1 @@
+export { CashierPage } from "./CashierPage";
