@@ -28,7 +28,7 @@ export function PatientHeaderCard({ profile }: Props) {
   const age = getAge(profile.birthDate);
   const { data: nextAppointment } = useNextAppointment(profile.id);
 
-  const lastVisit = profile.visits[0] ?? null;
+  const lastVisit = profile.history[0] ?? null;
 
   const bookAppointment = () =>
     navigate("/schedule", { state: { preselectPatientId: profile.id } });
@@ -43,9 +43,17 @@ export function PatientHeaderCard({ profile }: Props) {
   return (
     <div className="flex items-start gap-5 rounded-2xl bg-white p-5 shadow-sm">
       {/* Аватар */}
-      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-teal-100 text-xl font-bold text-teal-700">
-        {initials(profile.fullName ?? profile.phone)}
-      </div>
+      {profile.photoUrl ? (
+        <img
+          src={profile.photoUrl}
+          alt=""
+          className="h-16 w-16 shrink-0 rounded-2xl object-cover"
+        />
+      ) : (
+        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-teal-100 text-xl font-bold text-teal-700">
+          {initials(profile.fullName ?? profile.phone)}
+        </div>
+      )}
 
       {/* Инфо */}
       <div className="min-w-0 flex-1">
@@ -59,11 +67,12 @@ export function PatientHeaderCard({ profile }: Props) {
           <Field label={t("patientCard.finCode")} value={profile.finCode ?? "—"} />
           <Field label={t("patientCard.email")} value={profile.email ?? "—"} />
           <Field label={t("patientCard.attendingDoctor")} value={lastVisit?.doctorName ?? "—"} />
-          <Field label={t("patientCard.lastVisit")} value={lastVisit ? formatDate(lastVisit.scheduledAt) : "—"} />
+          <Field label={t("patientCard.lastVisit")} value={lastVisit ? formatDate(lastVisit.date) : "—"} />
           <Field
             label={t("patientCard.nextVisit")}
             value={nextAppointment ? formatDate(nextAppointment.scheduledAt) : "—"}
           />
+          <Field label={t("patientCard.address")} value={profile.address ?? "—"} />
         </div>
       </div>
 

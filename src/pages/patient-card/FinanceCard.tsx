@@ -39,6 +39,20 @@ export function FinanceCard({ patientId }: Props) {
               <span className="text-gray-500">{t("patientCard.coveredBySubscription")}</span>
               <span className="font-medium text-teal-600">{data.coveredAmount} ₼</span>
             </div>
+            {data.lastInvoice && (
+              <div className="flex justify-between border-t border-gray-50 pt-2.5">
+                <span className="text-gray-500">{t("patientCard.lastInvoice")}</span>
+                <span className="font-medium text-gray-800">
+                  {new Date(data.lastInvoice.date).toLocaleDateString("ru-RU", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                  {" · "}
+                  {data.lastInvoice.amount} ₼
+                </span>
+              </div>
+            )}
           </div>
         )}
       </div>

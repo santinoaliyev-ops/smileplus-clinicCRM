@@ -261,7 +261,11 @@
       "xray": "Рентген",
       "ct": "КТ",
       "documents": "Документы"
-    }
+    },
+    "address": "Адрес",
+    "currentMedications": "Принимаемые препараты",
+    "noFiles": "Файлов нет",
+    "lastInvoice": "Последний счёт"
   },
   "observation": {
     "title": "Наблюдение",

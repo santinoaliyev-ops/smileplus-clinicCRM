@@ -102,12 +102,10 @@ export function PatientCardPage() {
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <div className="flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm">
             <div className="shrink-0 border-b border-gray-100 px-4 py-3">
-              <span className="text-sm font-semibold text-gray-800">
-                {t("patientCard.visitHistory")} ({profile.visits.length})
-              </span>
+              <span className="text-sm font-semibold text-gray-800">{t("patientCard.visitHistory")}</span>
             </div>
             <div className="max-h-96 flex-1 overflow-y-auto">
-              <VisitHistoryTimeline visits={profile.visits} />
+              <VisitHistoryTimeline history={profile.history} />
             </div>
           </div>
 
@@ -117,7 +115,7 @@ export function PatientCardPage() {
 
         {/* Фото | Финансы | Медицинская информация */}
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <PhotosFilesCard selectedTooth={selectedTooth} />
+          <PhotosFilesCard patientId={patientId!} selectedTooth={selectedTooth} />
           <FinanceCard patientId={patientId!} />
           <MedicalInfoCard medicalCard={profile.medicalCard} />
         </div>

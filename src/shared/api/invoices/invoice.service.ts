@@ -51,6 +51,7 @@ export interface PatientFinanceSummary {
   paidAmount: number;
   unpaidAmount: number;
   coveredAmount: number;
+  lastInvoice: { date: string; amount: number; status: string } | null;
 }
 
 const num = (v: unknown): number =>
@@ -61,8 +62,9 @@ class InvoiceService {
   async getPatientFinanceSummary(patientId: string): Promise<PatientFinanceSummary> {
     const { data, error } = await supabase
       .from("invoices")
-      .select("status, total_amount, covered_amount, patient_amount")
-      .eq("user_id", patientId);
+      .select("status, total_amount, covered_amount, patient_amount, created_at, sent_at")
+      .eq("user_id", patientId)
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
 
@@ -76,12 +78,17 @@ class InvoiceService {
       .filter((r) => r.status !== "paid")
       .reduce((s, r) => s + num(r.patient_amount), 0);
 
+    const last = rows[0];
+
     return {
       invoiceCount: rows.length,
       totalAmount,
       paidAmount,
       unpaidAmount,
       coveredAmount,
+      lastInvoice: last
+        ? { date: last.sent_at ?? last.created_at, amount: num(last.patient_amount), status: last.status }
+        : null,
     };
   }
 

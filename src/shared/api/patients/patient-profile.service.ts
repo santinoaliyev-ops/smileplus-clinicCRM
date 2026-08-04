@@ -1,13 +1,15 @@
 import { supabase } from "@/shared/lib/supabase";
 
-export interface PatientProfileVisit {
-  appointmentId: string;
-  scheduledAt: string;
-  status: string;
+export interface PatientHistoryEntry {
+  id: string;
+  invoiceId: string | null;
+  appointmentId: string | null;
+  date: string;
   clinicName: string | null;
   doctorName: string | null;
   isOwn: boolean;
-  procedures: string[];
+  procedureName: string | null;
+  toothNumbers: number[] | null;
 }
 
 export interface PatientProfile {
@@ -18,10 +20,13 @@ export interface PatientProfile {
   finCode: string | null;
   birthDate: string | null;
   gender: string | null;
+  photoUrl: string | null;
+  address: string | null;
   medicalCard: {
     bloodType: string | null;
     allergies: string[] | null;
     chronicConditions: string[] | null;
+    currentMedications: string | null;
     diabetes: boolean | null;
     pregnancy: boolean | null;
     pacemaker: boolean | null;
@@ -37,7 +42,8 @@ export interface PatientProfile {
     coverageUsed: number;
     endDate: string | null;
   } | null;
-  visits: PatientProfileVisit[];
+  /** Хронология лечения по всем клиникам SmilePlus (по строкам счетов, не по приёмам) */
+  history: PatientHistoryEntry[];
 }
 
 export interface VisitDetail {
@@ -49,6 +55,17 @@ export interface VisitDetail {
     toothNumbers: number[];
     amountTotal: number;
   }[];
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function splitList(v: any): string[] | null {
+  if (!v) return null;
+  if (Array.isArray(v)) return v;
+  if (typeof v === "string") {
+    const list = v.split(",").map((s) => s.trim()).filter(Boolean);
+    return list.length ? list : null;
+  }
+  return null;
 }
 
 const num = (v: unknown): number =>
@@ -75,10 +92,13 @@ class PatientProfileService {
       finCode: p.fin_code ?? null,
       birthDate: p.birth_date ?? null,
       gender: p.gender ?? null,
+      photoUrl: p.photo_url ?? null,
+      address: p.address ?? null,
       medicalCard: {
         bloodType: p.blood_type ?? null,
-        allergies: p.allergies ?? null,
-        chronicConditions: p.chronic_conditions ?? null,
+        allergies: splitList(p.allergies),
+        chronicConditions: splitList(p.chronic_conditions),
+        currentMedications: p.current_medications ?? null,
         diabetes: p.diabetes ?? null,
         pregnancy: p.pregnancy ?? null,
         pacemaker: p.pacemaker ?? null,
@@ -93,21 +113,20 @@ class PatientProfileService {
             plan: sub.plan,
             coverageLimit: num(sub.coverage_limit),
             coverageUsed: num(sub.coverage_used),
-            endDate: sub.end_date ?? null,
+            endDate: sub.ends_at ?? null,
           }
         : null,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      visits: (data.recent_visits ?? []).map((v: any) => ({
-        appointmentId: v.appointment_id ?? v.id,
-        scheduledAt: v.visit_date ?? v.scheduled_at,
-        status: v.status ?? "completed",
-        clinicName: v.clinic_name ?? null,
-        doctorName: v.doctor_name ?? null,
-        isOwn: v.is_mine ?? v.is_own ?? false,
-        procedures: (v.procedures ?? []).map(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (pr: any) => (typeof pr === "string" ? pr : pr.name ?? "—")
-        ),
+      history: (data.history ?? []).map((h: any) => ({
+        id: h.id,
+        invoiceId: h.invoice_id ?? null,
+        appointmentId: h.appointment_id ?? null,
+        date: h.date,
+        clinicName: h.clinic_name ?? null,
+        doctorName: h.doctor_name ?? null,
+        isOwn: h.is_own ?? false,
+        procedureName: h.procedure_name ?? null,
+        toothNumbers: h.tooth_numbers ?? null,
       })),
     };
   }
@@ -125,7 +144,7 @@ class PatientProfileService {
     if (!data?.success) throw new Error(data?.error ?? "Failed to load visit");
 
     const v = data.visit;
-     
+
     return {
       appointmentId: v.appointment_id ?? appointmentId,
       scheduledAt: v.scheduled_at,

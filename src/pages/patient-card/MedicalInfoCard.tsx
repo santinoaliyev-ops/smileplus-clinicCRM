@@ -75,6 +75,13 @@ export function MedicalInfoCard({ medicalCard }: Props) {
           </div>
         </div>
 
+        {medicalCard.currentMedications && (
+          <div>
+            <span className="text-gray-500">{t("patientCard.currentMedications")}</span>
+            <p className="mt-1 rounded-lg bg-sky-50 p-2 text-xs text-sky-800">{medicalCard.currentMedications}</p>
+          </div>
+        )}
+
         {medicalCard.peculiarities && (
           <div>
             <span className="text-gray-500">{t("patientCard.peculiarities")}</span>

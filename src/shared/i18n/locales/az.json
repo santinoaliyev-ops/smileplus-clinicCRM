@@ -261,7 +261,11 @@
       "xray": "Rentgen",
       "ct": "KT",
       "documents": "Sənədlər"
-    }
+    },
+    "address": "Ünvan",
+    "currentMedications": "Qəbul etdiyi dərmanlar",
+    "noFiles": "Fayl yoxdur",
+    "lastInvoice": "Son hesab"
   },
   "observation": {
     "title": "Müşahidə",

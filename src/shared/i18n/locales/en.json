@@ -261,7 +261,11 @@
       "xray": "X-ray",
       "ct": "CT",
       "documents": "Documents"
-    }
+    },
+    "address": "Address",
+    "currentMedications": "Current medications",
+    "noFiles": "No files",
+    "lastInvoice": "Last invoice"
   },
   "observation": {
     "title": "Observation",
