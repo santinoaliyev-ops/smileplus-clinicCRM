@@ -10,8 +10,10 @@ import {
   useClinicProcedures,
   useCreateInvoice,
 } from "@/features/doctor-dashboard/hooks/useInvoice";
+import { useSpecialties } from "@/features/services-catalog/hooks/useSpecialties";
 import { appointmentDetailService } from "@/shared/api/appointments/appointment-detail.service";
 import type { ClinicProcedure } from "@/shared/api/invoices/invoice.service";
+import type { Specialty } from "@/shared/api/specialties/specialties.service";
 import { CompactToothBar } from "./CompactToothBar";
 
 interface CartItem {
@@ -20,21 +22,6 @@ interface CartItem {
   toothNumbers: number[];
   quantity: number;
 }
-
-const CATEGORIES = [
-  { code: "diagnostics",    nameAz: "Diaqnostika",      nameRu: "Диагностика" },
-  { code: "preventive",     nameAz: "Profilaktika",     nameRu: "Профилактика" },
-  { code: "therapy",        nameAz: "Terapiya",         nameRu: "Терапия" },
-  { code: "endodontics",    nameAz: "Endodontiya",      nameRu: "Эндодонтия" },
-  { code: "orthodontics",   nameAz: "Ortodontiya",      nameRu: "Ортодонтия" },
-  { code: "prosthodontics", nameAz: "Ortopediya",       nameRu: "Ортопедия" },
-  { code: "implantology",   nameAz: "İmplantologiya",   nameRu: "Имплантология" },
-  { code: "surgery",        nameAz: "Cərrahiyyə",       nameRu: "Хирургия" },
-  { code: "periodontology", nameAz: "Parodontologiya",  nameRu: "Пародонтология" },
-  { code: "esthetic",       nameAz: "Estetik",          nameRu: "Эстетика" },
-  { code: "pediatric",      nameAz: "Uşaq",             nameRu: "Детская" },
-  { code: "emergency",      nameAz: "Təcili",           nameRu: "Неотложная" },
-];
 
 export function InvoicePage() {
   const { appointmentId } = useParams<{ appointmentId: string }>();
@@ -45,7 +32,7 @@ export function InvoicePage() {
   const lang = i18n.language as "az" | "ru" | "en";
 
   const [selectedTeeth, setSelectedTeeth] = useState<number[]>([]);
-  const [activeCategory, setActiveCategory] = useState("diagnostics");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [discountPct, setDiscountPct] = useState("");
   const [discountReason, setDiscountReason] = useState("");
@@ -62,22 +49,28 @@ export function InvoicePage() {
     clinic?.clinicId,
     appointment?.patient.id
   );
+  const { data: specialties = [] } = useSpecialties();
   const createInvoice = useCreateInvoice();
 
-  const getCatName = (cat: (typeof CATEGORIES)[0]) =>
-    lang === "ru" ? cat.nameRu : cat.nameAz;
+  const activeCat = activeCategory ?? specialties[0]?.code ?? null;
+
+  const getCatName = (cat: Specialty) =>
+    lang === "ru" ? cat.nameRu : lang === "en" ? cat.nameEn : cat.nameAz;
   const getProcName = (p: ClinicProcedure) =>
     lang === "ru" ? p.nameRu : lang === "en" ? p.nameEn : p.nameAz;
 
   const visibleProcedures = useMemo(
     () =>
       proceduresData?.procedures.filter(
-        (p) => p.categoryCode === activeCategory
+        (p) => p.categoryCode === activeCat
       ) ?? [],
-    [proceduresData, activeCategory]
+    [proceduresData, activeCat]
   );
 
+  const canAdd = (p: ClinicProcedure) => !p.requiresTooth || selectedTeeth.length > 0;
+
   const addToCart = (p: ClinicProcedure) => {
+    if (!canAdd(p)) return;
     setError(null);
     setCart((prev) => [
       ...prev,
@@ -173,12 +166,12 @@ export function InvoicePage() {
       <div className="flex min-h-0 flex-[3] gap-px bg-gray-200">
         {/* Категории — дерево слева */}
         <div className="flex w-52 shrink-0 flex-col overflow-y-auto bg-white">
-          {CATEGORIES.map((cat) => (
+          {specialties.map((cat) => (
             <button
-              key={cat.code}
+              key={cat.id}
               onClick={() => setActiveCategory(cat.code)}
               className={`border-l-2 px-3 py-2 text-left text-sm transition ${
-                activeCategory === cat.code
+                activeCat === cat.code
                   ? "border-teal-600 bg-teal-50 font-semibold text-teal-800"
                   : "border-transparent text-gray-700 hover:bg-gray-50"
               }`}
@@ -207,30 +200,49 @@ export function InvoicePage() {
             {procLoading ? (
               <div className="p-4 text-center text-gray-400">{t("common.loading")}</div>
             ) : (
-              visibleProcedures.map((p) => (
-                <div
-                  key={p.procedureId}
-                  onDoubleClick={() => addToCart(p)}
-                  className="grid cursor-pointer grid-cols-[1fr_90px_90px_70px] items-center border-b border-gray-50 px-3 py-1.5 hover:bg-teal-50 transition"
-                >
-                  <span className="truncate">
-                    <span className="font-medium text-gray-800">{getProcName(p)}</span>
-                    {p.label && <span className="ml-1.5 text-xs text-teal-600">{p.label}</span>}
-                  </span>
-                  <span className="text-right font-semibold text-gray-900">{p.patientPrice} ₼</span>
-                  <span className="text-right text-teal-600">
-                    {p.coveredPrice > 0 ? `+${p.coveredPrice}` : "—"}
-                  </span>
-                  <span className="text-right">
-                    <button
-                      onClick={() => addToCart(p)}
-                      className="rounded bg-teal-50 px-2 py-0.5 text-xs font-semibold text-teal-700 hover:bg-teal-600 hover:text-white transition"
-                    >
-                      +
-                    </button>
-                  </span>
-                </div>
-              ))
+              visibleProcedures.map((p) => {
+                const disabled = !canAdd(p);
+                return (
+                  <div
+                    key={p.procedureId}
+                    onDoubleClick={() => addToCart(p)}
+                    title={disabled ? t("invoicePage.selectTeethFirst") : undefined}
+                    className={`grid grid-cols-[1fr_90px_90px_70px] items-center border-b border-gray-50 px-3 py-1.5 transition ${
+                      disabled ? "cursor-not-allowed opacity-40" : "cursor-pointer hover:bg-teal-50"
+                    }`}
+                  >
+                    <span className="truncate">
+                      <span className="font-medium text-gray-800">{getProcName(p)}</span>
+                      {p.label && <span className="ml-1.5 text-xs text-teal-600">{p.label}</span>}
+                      {p.promotion && (
+                        <span className="ml-1.5 rounded bg-orange-100 px-1 py-0.5 text-[10px] font-semibold text-orange-700">
+                          {t("invoicePage.promotion")}
+                        </span>
+                      )}
+                    </span>
+                    <span className="text-right font-semibold text-gray-900">
+                      {p.promotion && (
+                        <span className="mr-1 text-xs font-normal text-gray-400 line-through">
+                          {p.promotion.originalPrice} ₼
+                        </span>
+                      )}
+                      {p.patientPrice} ₼
+                    </span>
+                    <span className="text-right text-teal-600">
+                      {p.coveredPrice > 0 ? `+${p.coveredPrice}` : "—"}
+                    </span>
+                    <span className="text-right">
+                      <button
+                        onClick={() => addToCart(p)}
+                        disabled={disabled}
+                        className="rounded bg-teal-50 px-2 py-0.5 text-xs font-semibold text-teal-700 transition hover:bg-teal-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-teal-50 disabled:hover:text-teal-700"
+                      >
+                        +
+                      </button>
+                    </span>
+                  </div>
+                );
+              })
             )}
           </div>
         </div>
@@ -269,6 +281,11 @@ export function InvoicePage() {
                   <button onClick={() => changeQty(item.id, 1)} className="flex h-5 w-5 items-center justify-center rounded border border-gray-200 text-xs hover:bg-gray-100">+</button>
                 </div>
                 <span className="text-right font-semibold text-gray-900">
+                  {item.procedure.promotion && (
+                    <span className="mr-1 text-xs font-normal text-gray-400 line-through">
+                      {item.procedure.promotion.originalPrice * item.quantity} ₼
+                    </span>
+                  )}
                   {item.procedure.patientPrice * item.quantity} ₼
                 </span>
                 <span className="text-right text-teal-600">

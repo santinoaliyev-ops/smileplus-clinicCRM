@@ -16,6 +16,16 @@ export function useClinicDoctors() {
   });
 }
 
+export function useClinicDoctorsDetailed() {
+  const { clinic } = useClinic();
+  return useQuery({
+    queryKey: ["clinic-doctors-detailed", clinic?.clinicId],
+    queryFn: () => scheduleService.getClinicDoctorsDetailed(clinic!.clinicId),
+    enabled: !!clinic,
+    staleTime: 5 * 60_000,
+  });
+}
+
 export function useClinicDay(day: Date) {
   const { clinic } = useClinic();
   return useQuery({

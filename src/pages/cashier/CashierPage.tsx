@@ -1,20 +1,17 @@
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useAuth } from "@/app/providers/auth";
-import { useClinic } from "@/app/providers/clinic";
 import {
   useCashierInvoices,
   useCashierRealtime,
 } from "@/features/cashier/hooks/useCashier";
+import { DoctorDeskLayout } from "@/pages/doctor-desk/DoctorDeskLayout";
 import { InvoiceDetailPanel } from "./InvoiceDetailPanel";
 
 type Filter = "unpaid" | "partial" | "paid" | "all";
 
 export function CashierPage() {
   const { t, i18n } = useTranslation();
-  const { user, logout } = useAuth();
-  const { clinic } = useClinic();
 
   const [filter, setFilter] = useState<Filter>("unpaid");
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -61,54 +58,31 @@ export function CashierPage() {
   ];
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-slate-50">
-      {/* Шапка */}
-      <header className="flex shrink-0 items-center justify-between border-b border-gray-200 bg-white px-5 py-2.5">
-        <div className="flex items-center gap-3">
-          <h1 className="text-base font-semibold text-gray-900">
-            {t("cashier.title")}
-          </h1>
-          <span className="text-sm font-medium text-teal-600">
-            {clinic?.clinicName}
-          </span>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="rounded-xl bg-teal-50 px-4 py-1.5 text-sm">
-            <span className="text-gray-500">{t("cashier.todayTotal")}: </span>
-            <span className="font-bold text-teal-700">{todayPaid} ₼</span>
-          </div>
-          <div className="text-right text-sm">
-            <div className="font-semibold text-gray-800">
-              {user?.account.fullName}
-            </div>
-          </div>
-          <button
-            onClick={logout}
-            className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50"
-          >
-            {t("common.logout")}
-          </button>
-        </div>
-      </header>
-
-      <div className="flex flex-1 gap-3 overflow-hidden p-3">
+    <DoctorDeskLayout>
+      <div className="flex h-full gap-3 overflow-hidden">
         {/* Список инвойсов */}
         <div className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-white shadow-sm">
-          {/* Фильтры */}
-          <div className="flex shrink-0 gap-1 border-b border-gray-100 p-2">
-            {FILTERS.map((f) => (
-              <button
-                key={f.key}
-                onClick={() => setFilter(f.key)}
-                className={`rounded-lg px-3 py-1.5 text-sm transition ${
-                  filter === f.key
-                    ? "bg-teal-600 font-semibold text-white"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                {t(f.labelKey)}
-              </button>
-            ))}
+          {/* Фильтры + касса за сегодня */}
+          <div className="flex shrink-0 items-center justify-between gap-1 border-b border-gray-100 p-2">
+            <div className="flex gap-1">
+              {FILTERS.map((f) => (
+                <button
+                  key={f.key}
+                  onClick={() => setFilter(f.key)}
+                  className={`rounded-lg px-3 py-1.5 text-sm transition ${
+                    filter === f.key
+                      ? "bg-teal-600 font-semibold text-white"
+                      : "text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  {t(f.labelKey)}
+                </button>
+              ))}
+            </div>
+            <div className="mr-1 rounded-xl bg-teal-50 px-3 py-1 text-sm">
+              <span className="text-gray-500">{t("cashier.todayTotal")}: </span>
+              <span className="font-bold text-teal-700">{todayPaid} ₼</span>
+            </div>
           </div>
 
           {/* Заголовок таблицы */}
@@ -185,6 +159,6 @@ export function CashierPage() {
           />
         )}
       </div>
-    </div>
+    </DoctorDeskLayout>
   );
 }

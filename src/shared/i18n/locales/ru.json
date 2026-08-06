@@ -17,7 +17,8 @@
     "cancel": "Отменить",
     "back": "Назад",
     "close": "Закрыть",
-    "more": "Ещё"
+    "more": "Ещё",
+    "save": "Сохранить"
   },
   "doctorDesk": {
     "title": "Рабочий стол врача",
@@ -177,7 +178,9 @@
   "invoicePage": {
     "selectTeeth": "1. Выберите зубы",
     "selectTeethFirst": "Сначала выберите зубы на формуле, затем нажмите на процедуру",
-    "priceNote": "Итоговая сумма рассчитывается сервером при отправке"
+    "priceNote": "Итоговая сумма рассчитывается сервером при отправке",
+    "promotion": "Акция",
+    "cartEmpty": "Список процедур пуст"
   },
   "cashier": {
     "title": "Касса",
@@ -360,5 +363,93 @@
     "manager": "Директор",
     "cashier": "Кассир",
     "accountant": "Бухгалтер"
+  },
+  "adminDashboard": {
+    "title": "Главная",
+    "workspaceTitle": "Рабочий стол клиники",
+    "todaySchedule": "Расписание на сегодня",
+    "noAppointmentsToday": "Сегодня приёмов нет",
+    "quickActions": "Быстрые действия",
+    "queueTitle": "Очередь пациентов",
+    "freeSlots": "Свободные окна врачей",
+    "noFreeSlots": "Свободных окон нет",
+    "recentActivity": "Последние действия",
+    "noActivity": "Пока ничего не произошло",
+    "activityUnavailable": "Лента действий недоступна",
+    "kpi": {
+      "patients": "Пациентов сегодня",
+      "arrived": "Пришли",
+      "waiting": "Ожидают",
+      "late": "Опаздывают",
+      "freeSlots": "Свободных окон",
+      "unpaid": "Неоплаченных счетов",
+      "freeRooms": "Свободных кабинетов"
+    },
+    "queue": {
+      "arrived": "Уже пришёл",
+      "waiting": "В зоне ожидания",
+      "inProgress": "На лечении",
+      "completed": "Завершил приём",
+      "noShow": "Не пришёл"
+    },
+    "actions": {
+      "newPatient": "Новый пациент",
+      "bookPatient": "Записать пациента",
+      "findPatient": "Найти пациента",
+      "createInvoice": "Создать счёт",
+      "newCall": "Новый звонок"
+    }
+  },
+  "appointmentsPage": {
+    "title": "Приёмы",
+    "empty": "Приёмов нет",
+    "filters": {
+      "all": "Все"
+    }
+  },
+  "doctorsPage": {
+    "title": "Врачи",
+    "empty": "Врачей нет",
+    "verified": "Проверенный врач",
+    "notAccepting": "Не принимает",
+    "todayCount": "Приёмов сегодня",
+    "load": "Загрузка",
+    "workingHours": "Рабочее время",
+    "nextPatient": "Следующий пациент",
+    "dayOff": "Выходной",
+    "experience": "{{count}} лет опыта",
+    "room": "Кабинет",
+    "noRoom": "Не назначен",
+    "newRoomPlaceholder": "Название кабинета",
+    "addRoom": "Добавить"
+  },
+  "adminServices": {
+    "title": "Услуги и цены",
+    "tabServices": "Услуги",
+    "tabPromotions": "Акции",
+    "emptySpecialty": "В этой отрасли пока нет услуг — добавьте первую ниже",
+    "requiresTooth": "Нужен зуб",
+    "noToothNeeded": "Зуб не обязателен",
+    "nameRu": "Название (рус)",
+    "nameAz": "Название (az)",
+    "nameEn": "Название (en)",
+    "price": "Цена",
+    "addService": "Добавить услугу",
+    "enabled": "Включена в этой клинике",
+    "addPromotion": "Создать акцию",
+    "activate": "Включить",
+    "deactivate": "Выключить"
+  },
+  "subscriptionsPage": {
+    "title": "Подписки",
+    "empty": "Подписок нет",
+    "tabs": {
+      "active": "Активные",
+      "expiring": "Заканчиваются",
+      "expired": "Истекли"
+    }
+  },
+  "documentsPage": {
+    "title": "Документы"
   }
 }

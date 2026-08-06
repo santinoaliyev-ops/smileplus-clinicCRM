@@ -32,13 +32,19 @@ export interface DoctorPatientEntry {
 }
 
 class PatientsService {
-  /** Пациенты, у которых были приёмы у этого врача в этой клинике (для раздела «Медкарты»). */
-  async listForDoctor(clinicId: string, doctorId: string): Promise<DoctorPatientEntry[]> {
-    const { data, error } = await supabase
+  /**
+   * Пациенты клиники (у которых были приёмы). Если передан doctorId — только
+   * пациенты этого врача (раздел «Медкарты» у врача); без doctorId — вся клиника
+   * (раздел «Пациенты» у администратора).
+   */
+  async listForClinic(clinicId: string, doctorId?: string): Promise<DoctorPatientEntry[]> {
+    let query = supabase
       .from("appointments")
       .select("users ( id, full_name, phone, birth_date, fin_code )")
-      .eq("clinic_id", clinicId)
-      .eq("doctor_id", doctorId);
+      .eq("clinic_id", clinicId);
+    if (doctorId) query = query.eq("doctor_id", doctorId);
+
+    const { data, error } = await query;
 
     if (error) throw error;
 

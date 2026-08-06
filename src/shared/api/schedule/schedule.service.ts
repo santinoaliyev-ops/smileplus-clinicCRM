@@ -7,6 +7,18 @@ export interface ScheduleDoctor {
   specialization: string;
 }
 
+export interface ClinicDoctorProfile {
+  id: string;
+  fullName: string;
+  specialization: string;
+  avatarUrl: string | null;
+  experienceYears: number;
+  rating: number;
+  ratingCount: number;
+  isAccepting: boolean;
+  isVerified: boolean;
+}
+
 export interface ScheduleAppointment {
   id: string;
   doctorId: string;
@@ -38,6 +50,31 @@ class ScheduleService {
       id: d.id,
       fullName: d.clinic_staff?.full_name ?? "—",
       specialization: d.specialization,
+    }));
+  }
+
+  /** Врачи клиники с расширенным профилем (раздел «Врачи» у администратора) */
+  async getClinicDoctorsDetailed(clinicId: string): Promise<ClinicDoctorProfile[]> {
+    const { data, error } = await supabase
+      .from("doctors")
+      .select(
+        "id, specialization, avatar_url, experience_years, rating, rating_count, is_accepting, is_verified, clinic_staff ( full_name )"
+      )
+      .eq("clinic_id", clinicId);
+
+    if (error) throw error;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return data.map((d: any) => ({
+      id: d.id,
+      fullName: d.clinic_staff?.full_name ?? "—",
+      specialization: d.specialization,
+      avatarUrl: d.avatar_url ?? null,
+      experienceYears: d.experience_years ?? 0,
+      rating: Number(d.rating) || 0,
+      ratingCount: d.rating_count ?? 0,
+      isAccepting: d.is_accepting ?? true,
+      isVerified: d.is_verified ?? false,
     }));
   }
 

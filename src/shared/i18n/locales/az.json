@@ -17,7 +17,8 @@
     "cancel": "Ləğv et",
     "close": "Bağla",
     "back": "Geri",
-    "more": "Daha"
+    "more": "Daha",
+    "save": "Yadda saxla"
   },
   "doctorDesk": {
     "title": "Həkimin iş masası",
@@ -177,7 +178,9 @@
   "invoicePage": {
     "selectTeeth": "1. Dişləri seçin",
     "selectTeethFirst": "Əvvəlcə formulada dişləri seçin, sonra prosedura klikləyin",
-    "priceNote": "Yekun məbləğ hesab göndərilərkən serverdə hesablanır"
+    "priceNote": "Yekun məbləğ hesab göndərilərkən serverdə hesablanır",
+    "promotion": "Aksiya",
+    "cartEmpty": "Prosedur siyahısı boşdur"
   },
   "cashier": {
     "title": "Kassa",
@@ -360,5 +363,93 @@
     "manager": "Direktor",
     "cashier": "Kassir",
     "accountant": "Mühasib"
+  },
+  "adminDashboard": {
+    "title": "Əsas",
+    "workspaceTitle": "Klinikanın iş masası",
+    "todaySchedule": "Bugünkü cədvəl",
+    "noAppointmentsToday": "Bu gün qəbul yoxdur",
+    "quickActions": "Sürətli əməliyyatlar",
+    "queueTitle": "Pasiyent növbəsi",
+    "freeSlots": "Həkimlərin boş vaxtları",
+    "noFreeSlots": "Boş vaxt yoxdur",
+    "recentActivity": "Son əməliyyatlar",
+    "noActivity": "Hələ heç nə baş verməyib",
+    "activityUnavailable": "Əməliyyat lenti əlçatan deyil",
+    "kpi": {
+      "patients": "Bu gün pasiyent",
+      "arrived": "Gəliblər",
+      "waiting": "Gözləyirlər",
+      "late": "Gecikirlər",
+      "freeSlots": "Boş vaxtlar",
+      "unpaid": "Ödənilməmiş hesablar",
+      "freeRooms": "Boş kabinetlər"
+    },
+    "queue": {
+      "arrived": "Artıq gəlib",
+      "waiting": "Gözləmə zonasında",
+      "inProgress": "Müalicədədir",
+      "completed": "Qəbulu bitirib",
+      "noShow": "Gəlmədi"
+    },
+    "actions": {
+      "newPatient": "Yeni pasiyent",
+      "bookPatient": "Pasiyenti yaz",
+      "findPatient": "Pasiyent tap",
+      "createInvoice": "Hesab yarat",
+      "newCall": "Yeni zəng"
+    }
+  },
+  "appointmentsPage": {
+    "title": "Qəbullar",
+    "empty": "Qəbul yoxdur",
+    "filters": {
+      "all": "Hamısı"
+    }
+  },
+  "doctorsPage": {
+    "title": "Həkimlər",
+    "empty": "Həkim yoxdur",
+    "verified": "Təsdiqlənmiş həkim",
+    "notAccepting": "Qəbul etmir",
+    "todayCount": "Bu gün qəbul",
+    "load": "Yüklənmə",
+    "workingHours": "İş saatları",
+    "nextPatient": "Növbəti pasiyent",
+    "dayOff": "İstirahət günü",
+    "experience": "{{count}} il təcrübə",
+    "room": "Kabinet",
+    "noRoom": "Təyin edilməyib",
+    "newRoomPlaceholder": "Kabinet adı",
+    "addRoom": "Əlavə et"
+  },
+  "adminServices": {
+    "title": "Xidmətlər və qiymətlər",
+    "tabServices": "Xidmətlər",
+    "tabPromotions": "Aksiyalar",
+    "emptySpecialty": "Bu sahədə hələ xidmət yoxdur — aşağıda ilkini əlavə edin",
+    "requiresTooth": "Diş lazımdır",
+    "noToothNeeded": "Diş seçimi mütləq deyil",
+    "nameRu": "Ad (rus)",
+    "nameAz": "Ad (az)",
+    "nameEn": "Ad (en)",
+    "price": "Qiymət",
+    "addService": "Xidmət əlavə et",
+    "enabled": "Bu klinikada aktivdir",
+    "addPromotion": "Aksiya yarat",
+    "activate": "Aktiv et",
+    "deactivate": "Deaktiv et"
+  },
+  "subscriptionsPage": {
+    "title": "Abunələr",
+    "empty": "Abunə yoxdur",
+    "tabs": {
+      "active": "Aktiv",
+      "expiring": "Bitməkdə",
+      "expired": "Bitib"
+    }
+  },
+  "documentsPage": {
+    "title": "Sənədlər"
   }
 }

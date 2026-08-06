@@ -1,5 +1,11 @@
 import { supabase } from "@/shared/lib/supabase";
 
+export interface ProcedurePromotion {
+  discountType: "percent" | "fixed";
+  discountValue: number;
+  originalPrice: number;
+}
+
 export interface ClinicProcedure {
   procedureId: string;
   code: string;
@@ -12,6 +18,10 @@ export interface ClinicProcedure {
   patientPrice: number;
   coveredPrice: number;
   label: string | null;
+  /** Обязателен ли выбор зуба для этой услуги (диагностика/профилактика и явные исключения вроде анестезии/коффердама — false) */
+  requiresTooth: boolean;
+  /** Активная акция клиники на эту услугу, если есть */
+  promotion: ProcedurePromotion | null;
 }
 
 export interface ClinicProceduresResponse {
@@ -121,6 +131,12 @@ class InvoiceService {
           patient_price: number;
           covered_price: number;
           label?: string;
+          requires_tooth?: boolean;
+          promotion?: {
+            discount_type: "percent" | "fixed";
+            discount_value: number;
+            original_price: number;
+          } | null;
         }) => ({
           procedureId: p.procedure_id,
           code: p.code,
@@ -133,6 +149,14 @@ class InvoiceService {
           patientPrice: p.patient_price,
           coveredPrice: p.covered_price,
           label: p.label ?? null,
+          requiresTooth: p.requires_tooth ?? true,
+          promotion: p.promotion
+            ? {
+                discountType: p.promotion.discount_type,
+                discountValue: p.promotion.discount_value,
+                originalPrice: p.promotion.original_price,
+              }
+            : null,
         })
       ),
     };

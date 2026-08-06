@@ -4,16 +4,20 @@ import { useTranslation } from "react-i18next";
 
 import { useClinic } from "@/app/providers/clinic";
 import { useDoctorProfile } from "@/features/doctor-dashboard/hooks/useDoctorProfile";
-import { usePatientsForDoctor } from "@/features/patient-list/hooks/usePatientList";
+import { usePatientsForDoctor, usePatientsForClinic } from "@/features/patient-list/hooks/usePatientList";
 import { getAge } from "@/features/doctor-dashboard/lib/desk-utils";
 import { DoctorDeskLayout } from "@/pages/doctor-desk/DoctorDeskLayout";
+import { UserRole } from "@/shared/types/auth";
 
 export function PatientListPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { clinic } = useClinic();
+  const isDoctor = clinic?.role === UserRole.Doctor;
   const { data: doctor } = useDoctorProfile();
-  const { data: patients = [], isLoading } = usePatientsForDoctor(clinic?.clinicId, doctor?.id);
+  const ownPatients = usePatientsForDoctor(clinic?.clinicId, isDoctor ? doctor?.id : undefined);
+  const clinicPatients = usePatientsForClinic(!isDoctor ? clinic?.clinicId : undefined);
+  const { data: patients = [], isLoading } = isDoctor ? ownPatients : clinicPatients;
 
   const [query, setQuery] = useState("");
 

@@ -4,7 +4,9 @@ import { LoginPage } from "@/pages/auth/LoginPage";
 import { DashboardPage } from "@/pages/dashboard";
 import { DoctorDeskPage } from "@/pages/doctor-desk";
 import { ProtectedRoute } from "@/app/routes/ProtectedRoute";
+import { RequireRole } from "@/app/routes/RequireRole";
 import { RoleHome } from "@/app/routes/RoleHome";
+import { UserRole } from "@/shared/types/auth";
 import { SchedulePage } from "@/pages/schedule";
 import { InvoicePage } from "@/pages/invoice";
 import { CashierPage } from "@/pages/cashier";
@@ -12,6 +14,12 @@ import { PatientCardPage } from "@/pages/patient-card";
 import { TreatmentPlanPage } from "@/pages/treatment-plan";
 import { PatientListPage } from "@/pages/patient-list";
 import { SettingsPage } from "@/pages/settings";
+import { AdminDashboardPage } from "@/pages/admin-dashboard";
+import { AppointmentsPage } from "@/pages/admin-appointments";
+import { DoctorsPage } from "@/pages/admin-doctors";
+import { SubscriptionsPage } from "@/pages/admin-subscriptions";
+import { ClinicDocumentsPage } from "@/pages/admin-documents";
+import { AdminServicesPage } from "@/pages/admin-services";
 
 export default function App() {
   return (
@@ -23,6 +31,16 @@ export default function App() {
         <Route path="/doctor" element={<DoctorDeskPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/schedule" element={<SchedulePage />} />
+        <Route path="/admin" element={<AdminDashboardPage />} />
+        <Route path="/appointments" element={<AppointmentsPage />} />
+        <Route path="/doctors" element={<DoctorsPage />} />
+        <Route path="/subscriptions" element={<SubscriptionsPage />} />
+        <Route path="/documents" element={<ClinicDocumentsPage />} />
+
+        <Route element={<RequireRole roles={[UserRole.Manager]} fallback="/admin" />}>
+          <Route path="/admin/services" element={<AdminServicesPage />} />
+        </Route>
+
         <Route path="/patients" element={<PatientListPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/doctor/invoice/:appointmentId" element={<InvoicePage />} />

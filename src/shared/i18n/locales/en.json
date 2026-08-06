@@ -17,7 +17,8 @@
     "cancel": "Cancel",
     "close": "Close",
     "back": "Back",
-    "more": "More"
+    "more": "More",
+    "save": "Save"
   },
   "doctorDesk": {
     "title": "Doctor's desk",
@@ -177,7 +178,9 @@
   "invoicePage": {
     "selectTeeth": "1. Select teeth",
     "selectTeethFirst": "First select teeth on the chart, then click a procedure",
-    "priceNote": "Final amount is calculated by server on submit"
+    "priceNote": "Final amount is calculated by server on submit",
+    "promotion": "Promotion",
+    "cartEmpty": "No procedures added yet"
   },
   "cashier": {
     "title": "Cash desk",
@@ -360,5 +363,93 @@
     "manager": "Manager",
     "cashier": "Cashier",
     "accountant": "Accountant"
+  },
+  "adminDashboard": {
+    "title": "Home",
+    "workspaceTitle": "Clinic workspace",
+    "todaySchedule": "Today's schedule",
+    "noAppointmentsToday": "No appointments today",
+    "quickActions": "Quick actions",
+    "queueTitle": "Patient queue",
+    "freeSlots": "Doctors' free slots",
+    "noFreeSlots": "No free slots",
+    "recentActivity": "Recent activity",
+    "noActivity": "Nothing has happened yet",
+    "activityUnavailable": "Activity feed unavailable",
+    "kpi": {
+      "patients": "Patients today",
+      "arrived": "Arrived",
+      "waiting": "Waiting",
+      "late": "Late",
+      "freeSlots": "Free slots",
+      "unpaid": "Unpaid invoices",
+      "freeRooms": "Free rooms"
+    },
+    "queue": {
+      "arrived": "Arrived",
+      "waiting": "In waiting room",
+      "inProgress": "In treatment",
+      "completed": "Finished",
+      "noShow": "No-show"
+    },
+    "actions": {
+      "newPatient": "New patient",
+      "bookPatient": "Book patient",
+      "findPatient": "Find patient",
+      "createInvoice": "Create invoice",
+      "newCall": "New call"
+    }
+  },
+  "appointmentsPage": {
+    "title": "Appointments",
+    "empty": "No appointments",
+    "filters": {
+      "all": "All"
+    }
+  },
+  "doctorsPage": {
+    "title": "Doctors",
+    "empty": "No doctors",
+    "verified": "Verified doctor",
+    "notAccepting": "Not accepting",
+    "todayCount": "Appointments today",
+    "load": "Load",
+    "workingHours": "Working hours",
+    "nextPatient": "Next patient",
+    "dayOff": "Day off",
+    "experience": "{{count}} years of experience",
+    "room": "Room",
+    "noRoom": "Not assigned",
+    "newRoomPlaceholder": "Room name",
+    "addRoom": "Add"
+  },
+  "adminServices": {
+    "title": "Services & Pricing",
+    "tabServices": "Services",
+    "tabPromotions": "Promotions",
+    "emptySpecialty": "No services in this specialty yet — add the first one below",
+    "requiresTooth": "Tooth required",
+    "noToothNeeded": "Tooth selection optional",
+    "nameRu": "Name (ru)",
+    "nameAz": "Name (az)",
+    "nameEn": "Name (en)",
+    "price": "Price",
+    "addService": "Add service",
+    "enabled": "Enabled at this clinic",
+    "addPromotion": "Create promotion",
+    "activate": "Activate",
+    "deactivate": "Deactivate"
+  },
+  "subscriptionsPage": {
+    "title": "Subscriptions",
+    "empty": "No subscriptions",
+    "tabs": {
+      "active": "Active",
+      "expiring": "Expiring",
+      "expired": "Expired"
+    }
+  },
+  "documentsPage": {
+    "title": "Documents"
   }
 }

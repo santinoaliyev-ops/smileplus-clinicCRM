@@ -11,12 +11,11 @@ export function RoleHome() {
     case UserRole.Doctor:
         return <Navigate to="/doctor" replace />;
     case UserRole.Receptionist:
-        return <Navigate to="/schedule" replace />;
-    // позже: manager → /director, receptionist → /schedule, cashier → /cashier
-    default:
-      return <Navigate to="/dashboard" replace />;
-    
+    case UserRole.Manager:
+        return <Navigate to="/admin" replace />;
     case UserRole.Cashier:
       return <Navigate to="/cashier" replace />;
+    default:
+      return <Navigate to="/dashboard" replace />;
   }
 }

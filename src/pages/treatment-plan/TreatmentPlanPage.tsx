@@ -7,6 +7,7 @@ import { usePatientProfile } from "@/features/patient-card/hooks/usePatientProfi
 import { usePatientTeeth } from "@/features/doctor-dashboard/hooks/usePatientTeeth";
 import { useDoctorProfile } from "@/features/doctor-dashboard/hooks/useDoctorProfile";
 import { useClinicProcedures } from "@/features/doctor-dashboard/hooks/useInvoice";
+import { useSpecialties } from "@/features/services-catalog/hooks/useSpecialties";
 import {
   usePatientPlans,
   useCreatePlan,
@@ -17,6 +18,7 @@ import type {
   TreatmentPlanStatus,
 } from "@/shared/api/treatment-plans/treatment-plans.service";
 import type { ClinicProcedure } from "@/shared/api/invoices/invoice.service";
+import type { Specialty } from "@/shared/api/specialties/specialties.service";
 import { CompactToothBar } from "@/pages/invoice/CompactToothBar";
 import { getAge } from "@/features/doctor-dashboard/lib/desk-utils";
 
@@ -24,21 +26,6 @@ interface PlanItemDraft {
   procedure: ClinicProcedure;
   toothNumbers: number[];
 }
-
-const CATEGORIES = [
-  { code: "diagnostics",    nameAz: "Diaqnostika",      nameRu: "Диагностика" },
-  { code: "preventive",     nameAz: "Profilaktika",     nameRu: "Профилактика" },
-  { code: "therapy",        nameAz: "Terapiya",         nameRu: "Терапия" },
-  { code: "endodontics",    nameAz: "Endodontiya",      nameRu: "Эндодонтия" },
-  { code: "orthodontics",   nameAz: "Ortodontiya",      nameRu: "Ортодонтия" },
-  { code: "prosthodontics", nameAz: "Ortopediya",       nameRu: "Ортопедия" },
-  { code: "implantology",   nameAz: "İmplantologiya",   nameRu: "Имплантология" },
-  { code: "surgery",        nameAz: "Cərrahiyyə",       nameRu: "Хирургия" },
-  { code: "periodontology", nameAz: "Parodontologiya",  nameRu: "Пародонтология" },
-  { code: "esthetic",       nameAz: "Estetik",          nameRu: "Эстетика" },
-  { code: "pediatric",      nameAz: "Uşaq",             nameRu: "Детская" },
-  { code: "emergency",      nameAz: "Təcili",           nameRu: "Неотложная" },
-];
 
 const STATUS_COLORS: Record<TreatmentPlanStatus, string> = {
   draft: "bg-gray-100 text-gray-600",
@@ -62,29 +49,33 @@ export function TreatmentPlanPage() {
     clinic?.clinicId,
     patientId
   );
+  const { data: specialties = [] } = useSpecialties();
   const createPlan = useCreatePlan(patientId!);
   const { updateStatus, markCompleted } = usePlanActions(patientId!);
 
   const [selectedTeeth, setSelectedTeeth] = useState<number[]>([]);
   const [creating, setCreating] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
-  const [activeCategory, setActiveCategory] = useState("diagnostics");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [planTitle, setPlanTitle] = useState("");
   const [planNotes, setPlanNotes] = useState("");
   const [planItems, setPlanItems] = useState<PlanItemDraft[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const age = getAge(profile?.birthDate ?? null);
+  const activeCat = activeCategory ?? specialties[0]?.code ?? null;
 
   const getProcName = (p: ClinicProcedure) =>
     lang === "ru" ? p.nameRu : lang === "en" ? p.nameEn : p.nameAz;
-  const getCatName = (cat: (typeof CATEGORIES)[0]) =>
-    lang === "ru" ? cat.nameRu : cat.nameAz;
+  const getCatName = (cat: Specialty) =>
+    lang === "ru" ? cat.nameRu : lang === "en" ? cat.nameEn : cat.nameAz;
 
   const visibleProcedures = useMemo(
-    () => proceduresData?.procedures.filter((p) => p.categoryCode === activeCategory) ?? [],
-    [proceduresData, activeCategory]
+    () => proceduresData?.procedures.filter((p) => p.categoryCode === activeCat) ?? [],
+    [proceduresData, activeCat]
   );
+
+  const canAdd = (p: ClinicProcedure) => !p.requiresTooth || selectedTeeth.length > 0;
 
   // таблица treatment_plan_items не хранит имя процедуры — резолвим по procedureId из каталога
   const resolveItemName = (procedureId: string) => {
@@ -110,6 +101,7 @@ export function TreatmentPlanPage() {
   };
 
   const addItem = (p: ClinicProcedure) => {
+    if (!canAdd(p)) return;
     setPlanItems((prev) => [...prev, { procedure: p, toothNumbers: [...selectedTeeth] }]);
     setSelectedTeeth([]);
   };
@@ -227,12 +219,12 @@ export function TreatmentPlanPage() {
           <div className="flex min-h-0 flex-1 gap-px bg-gray-200">
             {/* Категории + процедуры */}
             <div className="flex w-52 shrink-0 flex-col overflow-y-auto bg-white">
-              {CATEGORIES.map((cat) => (
+              {specialties.map((cat) => (
                 <button
-                  key={cat.code}
+                  key={cat.id}
                   onClick={() => setActiveCategory(cat.code)}
                   className={`border-l-2 px-3 py-2 text-left text-sm transition ${
-                    activeCategory === cat.code
+                    activeCat === cat.code
                       ? "border-teal-600 bg-teal-50 font-semibold text-teal-800"
                       : "border-transparent text-gray-700 hover:bg-gray-50"
                   }`}
@@ -251,16 +243,23 @@ export function TreatmentPlanPage() {
                     <button
                       key={p.procedureId}
                       onClick={() => addItem(p)}
-                      disabled={selectedTeeth.length === 0}
+                      disabled={!canAdd(p)}
                       className="flex w-full items-center justify-between border-b border-gray-50 px-3 py-2.5 text-left text-sm transition hover:bg-teal-50 disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       <span className="font-medium text-gray-800">{getProcName(p)}</span>
-                      <span className="text-xs text-teal-600">{p.patientPrice} ₼</span>
+                      <span className="text-xs text-teal-600">
+                        {p.promotion && (
+                          <span className="mr-1 text-gray-400 line-through">
+                            {p.promotion.originalPrice} ₼
+                          </span>
+                        )}
+                        {p.patientPrice} ₼
+                      </span>
                     </button>
                   ))
                 )}
               </div>
-              {selectedTeeth.length === 0 && (
+              {visibleProcedures.some((p) => p.requiresTooth) && selectedTeeth.length === 0 && (
                 <p className="shrink-0 border-t border-gray-100 px-3 py-2 text-xs text-gray-400">
                   {t("treatmentPlan.selectTeeth")}
                 </p>

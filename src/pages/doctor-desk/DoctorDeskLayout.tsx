@@ -14,14 +14,44 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
 
   const isDoctor = clinic?.role === UserRole.Doctor;
+  const isAdmin = clinic?.role === UserRole.Receptionist || clinic?.role === UserRole.Manager;
+  const isManager = clinic?.role === UserRole.Manager;
 
-  const navItems = [
-    { icon: "🦷", key: "desk",     path: "/doctor",   active: true,     title: t("doctorDesk.title") },
-    { icon: "📅", key: "schedule", path: "/schedule", active: true,     title: t("schedule.title") },
-    { icon: "🗂️", key: "patients", path: "/patients", active: isDoctor, title: t("patientList.title") },
-    { icon: "🧾", key: "invoices", path: null,        active: false,    title: t("common.comingSoon") },
-    { icon: "📊", key: "reports",  path: null,        active: false,    title: t("common.comingSoon") },
+  const doctorNavItems = [
+    { icon: "🦷", key: "desk",     path: "/doctor",   active: true, title: t("doctorDesk.title") },
+    { icon: "📅", key: "schedule", path: "/schedule", active: true, title: t("schedule.title") },
+    { icon: "🗂️", key: "patients", path: "/patients", active: true, title: t("patientList.title") },
+    { icon: "🧾", key: "invoices", path: null,        active: false, title: t("common.comingSoon") },
+    { icon: "📊", key: "reports",  path: null,        active: false, title: t("common.comingSoon") },
   ];
+
+  const adminNavItems = [
+    { icon: "🏠", key: "home",          path: "/admin",    active: true,  title: t("adminDashboard.title") },
+    { icon: "👥", key: "patients",      path: "/patients", active: true,  title: t("patientList.title") },
+    { icon: "📅", key: "schedule",      path: "/schedule", active: true,  title: t("schedule.title") },
+    { icon: "🦷", key: "appointments",  path: "/appointments",  active: true, title: t("appointmentsPage.title") },
+    { icon: "👨‍⚕️", key: "doctors",      path: "/doctors",       active: true, title: t("doctorsPage.title") },
+    { icon: "💳", key: "cashier",       path: "/cashier",  active: true,  title: t("cashier.title") },
+    { icon: "⭐", key: "subscriptions", path: "/subscriptions", active: true, title: t("subscriptionsPage.title") },
+    { icon: "📦", key: "documents",     path: "/documents",     active: true, title: t("documentsPage.title") },
+    ...(isManager
+      ? [{ icon: "🏷️", key: "services", path: "/admin/services", active: true, title: t("adminServices.title") }]
+      : []),
+    { icon: "💬", key: "messages",      path: null,        active: false, title: t("common.comingSoon") },
+    { icon: "🔔", key: "notifications", path: null,        active: false, title: t("common.comingSoon") },
+  ];
+
+  const cashierNavItems = [
+    { icon: "💳", key: "cashier", path: "/cashier", active: true, title: t("cashier.title") },
+  ];
+
+  const navItems = isDoctor
+    ? doctorNavItems
+    : isAdmin
+    ? adminNavItems
+    : clinic?.role === UserRole.Cashier
+    ? cashierNavItems
+    : [];
 
   const isSettingsActive = location.pathname === "/settings";
 
@@ -71,7 +101,7 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
         <header className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-2.5">
           <div className="flex items-center gap-3">
             <span className="text-sm font-semibold text-gray-800">
-              {t("doctorDesk.title")}
+              {isDoctor ? t("doctorDesk.title") : t("adminDashboard.workspaceTitle")}
             </span>
             <span className="text-gray-300">·</span>
             <span className="text-sm font-medium text-teal-600">
