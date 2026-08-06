@@ -7,13 +7,22 @@ import {
 
 import { ClinicContext } from "./ClinicContext";
 import { useAuth } from "@/app/providers/auth";
-import type { CurrentClinic } from "@/shared/types/auth";
+import type { ClinicStaff, CurrentClinic } from "@/shared/types/auth";
 
 interface Props {
   children: ReactNode;
 }
 
 const STORAGE_KEY = "smileplus.currentClinic";
+
+function toCurrentClinic(staff: ClinicStaff): CurrentClinic {
+  return {
+    clinicId: staff.clinicId,
+    clinicStaffId: staff.id,
+    clinicName: staff.clinic.name,
+    role: staff.role,
+  };
+}
 
 export function ClinicProvider({ children }: Props) {
   const { user } = useAuth();
@@ -23,20 +32,19 @@ export function ClinicProvider({ children }: Props) {
     () => localStorage.getItem(STORAGE_KEY)
   );
 
-  // Активная клиника вычисляется из user + выбора, без эффектов
+  // Активная клиника вычисляется из user + выбора, без эффектов.
+  // Если клиника ровно одна — выбирать нечего, используем её всегда.
+  // Если их несколько — нужен явный выбор (см. SelectClinicPage), пока
+  // его нет (или сохранённый выбор больше не входит в список пользователя) — null.
   const clinic = useMemo<CurrentClinic | null>(() => {
     if (!user || user.clinics.length === 0) return null;
 
-    const selected =
-      user.clinics.find((c) => c.clinicId === selectedClinicId) ??
-      user.clinics[0];
+    if (user.clinics.length === 1) {
+      return toCurrentClinic(user.clinics[0]);
+    }
 
-    return {
-      clinicId: selected.clinicId,
-      clinicStaffId: selected.id,
-      clinicName: selected.clinic.name,
-      role: selected.role,
-    };
+    const selected = user.clinics.find((c) => c.clinicId === selectedClinicId);
+    return selected ? toCurrentClinic(selected) : null;
   }, [user, selectedClinicId]);
 
   const setClinic = useCallback((next: CurrentClinic) => {

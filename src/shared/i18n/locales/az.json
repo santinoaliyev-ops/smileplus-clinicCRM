@@ -8,6 +8,11 @@
     "submitting": "Daxil olunur…",
     "error": "Yanlış email və ya şifrə"
   },
+  "selectClinic": {
+    "title": "Klinikanı seçin",
+    "subtitle": "Siz bir neçə klinikada işləyirsiniz — hansına daxil olmaq istədiyinizi seçin",
+    "switch": "Klinikanı dəyiş"
+  },
   "common": {
     "loading": "Yüklənir…",
     "logout": "Çıxış",

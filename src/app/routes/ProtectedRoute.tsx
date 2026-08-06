@@ -1,8 +1,11 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/app/providers/auth";
+import { useClinic } from "@/app/providers/clinic";
 
 export function ProtectedRoute() {
-  const { isAuthenticated, loading } = useAuth();
+  const { user, isAuthenticated, loading } = useAuth();
+  const { clinic } = useClinic();
+  const location = useLocation();
 
   if (loading) {
     return (
@@ -14,6 +17,15 @@ export function ProtectedRoute() {
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
+  }
+
+  // Врач/директор с 2+ клиниками должен явно выбрать, в какую входит,
+  // прежде чем попасть в любую clinic-зависимую часть приложения.
+  const needsClinicSelection =
+    !clinic && (user?.clinics.length ?? 0) > 1 && location.pathname !== "/select-clinic";
+
+  if (needsClinicSelection) {
+    return <Navigate to="/select-clinic" replace />;
   }
 
   return <Outlet />;

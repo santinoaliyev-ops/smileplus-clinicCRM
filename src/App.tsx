@@ -20,6 +20,7 @@ import { DoctorsPage } from "@/pages/admin-doctors";
 import { SubscriptionsPage } from "@/pages/admin-subscriptions";
 import { ClinicDocumentsPage } from "@/pages/admin-documents";
 import { AdminServicesPage } from "@/pages/admin-services";
+import { SelectClinicPage } from "@/pages/select-clinic";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
       <Route path="/login" element={<LoginPage />} />
 
       <Route element={<ProtectedRoute />}>
+        <Route path="/select-clinic" element={<SelectClinicPage />} />
         <Route path="/" element={<RoleHome />} />
         <Route path="/doctor" element={<DoctorDeskPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />

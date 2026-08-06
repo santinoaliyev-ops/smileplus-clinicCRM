@@ -8,6 +8,11 @@
     "submitting": "Signing in…",
     "error": "Invalid email or password"
   },
+  "selectClinic": {
+    "title": "Select a clinic",
+    "subtitle": "You work at more than one clinic — choose which one to enter",
+    "switch": "Switch clinic"
+  },
   "common": {
     "loading": "Loading…",
     "logout": "Sign out",

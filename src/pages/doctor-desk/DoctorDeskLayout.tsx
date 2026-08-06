@@ -104,9 +104,19 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
               {isDoctor ? t("doctorDesk.title") : t("adminDashboard.workspaceTitle")}
             </span>
             <span className="text-gray-300">·</span>
-            <span className="text-sm font-medium text-teal-600">
-              {clinic?.clinicName}
-            </span>
+            {(user?.clinics.length ?? 0) > 1 ? (
+              <button
+                onClick={() => navigate("/select-clinic")}
+                title={t("selectClinic.switch")}
+                className="text-sm font-medium text-teal-600 underline decoration-dotted underline-offset-2 hover:text-teal-700"
+              >
+                {clinic?.clinicName}
+              </button>
+            ) : (
+              <span className="text-sm font-medium text-teal-600">
+                {clinic?.clinicName}
+              </span>
+            )}
           </div>
 
           <PatientSearchBox />
