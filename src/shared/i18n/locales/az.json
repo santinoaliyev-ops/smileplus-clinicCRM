@@ -87,6 +87,7 @@
     "openAppointment": "Qəbulu aç",
     "addPatient": "Pasiyent əlavə et",
     "free": "Boş",
+    "premium": "Premium",
     "load": {
       "low": "Aşağı yüklənmə",
       "mid": "Orta yüklənmə",
@@ -211,6 +212,9 @@
     "invalidAmount": "Düzgün məbləğ daxil edin",
     "overpayment": "Məbləğ qalıqdan çoxdur ({{remaining}} ₼)",
     "paymentError": "Ödəniş alınmadı"
+  },
+  "doctorInvoices": {
+    "title": "Mənim hesablarım"
   },
   "patientCard": {
     "toothChart": "Diş formulası",
@@ -368,6 +372,9 @@
     "manager": "Direktor",
     "cashier": "Kassir",
     "accountant": "Mühasib"
+  },
+  "receptionDashboard": {
+    "title": "Qeydiyyat"
   },
   "adminDashboard": {
     "title": "Əsas",

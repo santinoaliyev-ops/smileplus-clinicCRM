@@ -1,0 +1,1 @@
+export { ReceptionDashboardPage } from "./ReceptionDashboardPage";

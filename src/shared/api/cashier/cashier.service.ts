@@ -52,9 +52,14 @@ const num = (v: unknown): number => {
 };
 
 class CashierService {
-  async listInvoices(clinicId: string): Promise<CashierInvoice[]> {
+  async listInvoices(clinicId: string, doctorId?: string): Promise<CashierInvoice[]> {
     const { data, error } = await supabase.functions.invoke("clinic-invoices", {
-      body: { action: "list", clinic_id: clinicId, status: "all" },
+      body: {
+        action: "list",
+        clinic_id: clinicId,
+        status: "all",
+        ...(doctorId ? { doctor_id: doctorId } : {}),
+      },
     });
 
     if (error) throw error;

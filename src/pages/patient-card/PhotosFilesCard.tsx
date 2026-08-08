@@ -8,15 +8,9 @@ import {
   useDeletePatientFile,
 } from "@/features/patient-card/hooks/usePatientFiles";
 import type { PatientFileType } from "@/shared/api/patients/patient-files.service";
+import { PatientFileGrid } from "./PatientFileGrid";
 
 const TABS: PatientFileType[] = ["photo", "xray", "ct", "document"];
-
-const ICONS: Record<PatientFileType, string> = {
-  photo: "📷",
-  xray: "🩻",
-  ct: "🧊",
-  document: "📄",
-};
 
 const TAB_LABEL_KEY: Record<PatientFileType, string> = {
   photo: "patientCard.files.photos",
@@ -107,65 +101,12 @@ export function PhotosFilesCard({ patientId, selectedTooth }: Props) {
       </div>
 
       <div className="max-h-72 overflow-y-auto p-3">
-        {isLoading ? (
-          <div className="p-6 text-center text-sm text-gray-400">{t("common.loading")}</div>
-        ) : visibleFiles.length === 0 ? (
-          <div className="flex flex-col items-center gap-1 p-8 text-center text-sm text-gray-400">
-            <span className="text-2xl">{ICONS[tab]}</span>
-            <span>{t("patientCard.noFiles")}</span>
-          </div>
-        ) : tab === "document" ? (
-          <div className="space-y-1.5">
-            {visibleFiles.map((f) => (
-              <a
-                key={f.id}
-                href={f.url}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2 text-sm hover:bg-gray-100"
-              >
-                <span className="truncate text-gray-700">📄 {f.title ?? "—"}</span>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    remove.mutate({ id: f.id, storagePath: f.storagePath });
-                  }}
-                  className="ml-2 shrink-0 text-gray-400 hover:text-red-500"
-                >
-                  ✕
-                </button>
-              </a>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-3 gap-2">
-            {visibleFiles.map((f) => (
-              <a
-                key={f.id}
-                href={f.url}
-                target="_blank"
-                rel="noreferrer"
-                className="group relative aspect-square overflow-hidden rounded-lg bg-gray-100"
-              >
-                <img src={f.url} alt={f.title ?? ""} className="h-full w-full object-cover" />
-                {f.toothNumber && (
-                  <span className="absolute bottom-1 left-1 rounded bg-black/60 px-1 text-[9px] text-white">
-                    🦷 {f.toothNumber}
-                  </span>
-                )}
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    remove.mutate({ id: f.id, storagePath: f.storagePath });
-                  }}
-                  className="absolute right-1 top-1 hidden h-5 w-5 items-center justify-center rounded-full bg-black/60 text-xs text-white group-hover:flex"
-                >
-                  ✕
-                </button>
-              </a>
-            ))}
-          </div>
-        )}
+        <PatientFileGrid
+          fileType={tab}
+          files={visibleFiles}
+          isLoading={isLoading}
+          onDelete={(f) => remove.mutate({ id: f.id, storagePath: f.storagePath })}
+        />
       </div>
     </div>
   );

@@ -79,7 +79,7 @@ export function SelectedAppointmentPanel({ appointment, dayStats, onAddPatient }
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         <div className="rounded-2xl border border-gray-100 bg-white p-3 shadow-sm">
           <p className="text-xs text-gray-400">{t("schedule.today")}</p>
           <p className="text-xl font-bold text-gray-900">{dayStats.total}</p>
@@ -87,6 +87,10 @@ export function SelectedAppointmentPanel({ appointment, dayStats, onAddPatient }
         <div className="rounded-2xl border border-gray-100 bg-white p-3 shadow-sm">
           <p className="text-xs text-gray-400">{t("schedule.free")}</p>
           <p className="text-xl font-bold text-gray-900">{dayStats.free}</p>
+        </div>
+        <div className="rounded-2xl border border-gray-100 bg-white p-3 shadow-sm">
+          <p className="text-xs text-gray-400">{t("schedule.premium")}</p>
+          <p className="text-xl font-bold text-gray-900">{dayStats.premium}</p>
         </div>
       </div>
     </div>

@@ -21,6 +21,8 @@ import { SubscriptionsPage } from "@/pages/admin-subscriptions";
 import { ClinicDocumentsPage } from "@/pages/admin-documents";
 import { AdminServicesPage } from "@/pages/admin-services";
 import { SelectClinicPage } from "@/pages/select-clinic";
+import { DoctorInvoicesPage } from "@/pages/doctor-invoices";
+import { ReceptionDashboardPage } from "@/pages/reception-dashboard";
 
 export default function App() {
   return (
@@ -33,19 +35,21 @@ export default function App() {
         <Route path="/doctor" element={<DoctorDeskPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/schedule" element={<SchedulePage />} />
-        <Route path="/admin" element={<AdminDashboardPage />} />
+        <Route path="/reception" element={<ReceptionDashboardPage />} />
         <Route path="/appointments" element={<AppointmentsPage />} />
         <Route path="/doctors" element={<DoctorsPage />} />
-        <Route path="/subscriptions" element={<SubscriptionsPage />} />
-        <Route path="/documents" element={<ClinicDocumentsPage />} />
 
-        <Route element={<RequireRole roles={[UserRole.Manager]} fallback="/admin" />}>
+        <Route element={<RequireRole roles={[UserRole.Manager]} />}>
+          <Route path="/admin" element={<AdminDashboardPage />} />
           <Route path="/admin/services" element={<AdminServicesPage />} />
+          <Route path="/subscriptions" element={<SubscriptionsPage />} />
+          <Route path="/documents" element={<ClinicDocumentsPage />} />
         </Route>
 
         <Route path="/patients" element={<PatientListPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/doctor/invoice/:appointmentId" element={<InvoicePage />} />
+        <Route path="/doctor/invoices" element={<DoctorInvoicesPage />} />
         <Route path="/doctor/treatment-plan/:patientId" element={<TreatmentPlanPage />} />
         <Route path="/cashier" element={<CashierPage />} />
         <Route path="/patient/:patientId" element={<PatientCardPage />} />

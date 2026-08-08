@@ -30,10 +30,17 @@ class DoctorScheduleService {
 
 export const doctorScheduleService = new DoctorScheduleService();
 
-/** Свободные слоты врача на день с учётом уже занятых интервалов */
+/**
+ * Свободные слоты врача на день с учётом уже занятых интервалов.
+ * referenceNowMin — минуты "сейчас" (часы*60+минуты), слоты до этого момента
+ * отсекаются как прошедшие; передайте null, если день не сегодняшний и
+ * отсекать по текущему времени не нужно (иначе слоты "будущего" дня
+ * ошибочно резались бы по часам сегодняшнего).
+ */
 export function computeFreeSlots(
   rule: DoctorScheduleRule | undefined,
-  booked: { startMin: number; durationMin: number }[]
+  booked: { startMin: number; durationMin: number }[],
+  referenceNowMin: number | null
 ): { hour: number; minute: number }[] {
   if (!rule) return [];
 
@@ -44,11 +51,9 @@ export function computeFreeSlots(
   const step = rule.slotDuration || 30;
 
   const slots: { hour: number; minute: number }[] = [];
-  const now = new Date();
-  const nowMin = now.getHours() * 60 + now.getMinutes();
 
   for (let t = startMin; t + step <= endMin; t += step) {
-    if (t < nowMin) continue;
+    if (referenceNowMin !== null && t < referenceNowMin) continue;
     const overlaps = booked.some((b) => t < b.startMin + b.durationMin && t + step > b.startMin);
     if (!overlaps) slots.push({ hour: Math.floor(t / 60), minute: t % 60 });
   }

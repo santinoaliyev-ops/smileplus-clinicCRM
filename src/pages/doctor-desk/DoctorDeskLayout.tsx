@@ -14,18 +14,18 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
 
   const isDoctor = clinic?.role === UserRole.Doctor;
-  const isAdmin = clinic?.role === UserRole.Receptionist || clinic?.role === UserRole.Manager;
   const isManager = clinic?.role === UserRole.Manager;
+  const isReceptionist = clinic?.role === UserRole.Receptionist;
 
   const doctorNavItems = [
     { icon: "🦷", key: "desk",     path: "/doctor",   active: true, title: t("doctorDesk.title") },
     { icon: "📅", key: "schedule", path: "/schedule", active: true, title: t("schedule.title") },
     { icon: "🗂️", key: "patients", path: "/patients", active: true, title: t("patientList.title") },
-    { icon: "🧾", key: "invoices", path: null,        active: false, title: t("common.comingSoon") },
+    { icon: "🧾", key: "invoices", path: "/doctor/invoices", active: true, title: t("doctorInvoices.title") },
     { icon: "📊", key: "reports",  path: null,        active: false, title: t("common.comingSoon") },
   ];
 
-  const adminNavItems = [
+  const managerNavItems = [
     { icon: "🏠", key: "home",          path: "/admin",    active: true,  title: t("adminDashboard.title") },
     { icon: "👥", key: "patients",      path: "/patients", active: true,  title: t("patientList.title") },
     { icon: "📅", key: "schedule",      path: "/schedule", active: true,  title: t("schedule.title") },
@@ -34,9 +34,20 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
     { icon: "💳", key: "cashier",       path: "/cashier",  active: true,  title: t("cashier.title") },
     { icon: "⭐", key: "subscriptions", path: "/subscriptions", active: true, title: t("subscriptionsPage.title") },
     { icon: "📦", key: "documents",     path: "/documents",     active: true, title: t("documentsPage.title") },
-    ...(isManager
-      ? [{ icon: "🏷️", key: "services", path: "/admin/services", active: true, title: t("adminServices.title") }]
-      : []),
+    { icon: "🏷️", key: "services",      path: "/admin/services", active: true, title: t("adminServices.title") },
+    { icon: "💬", key: "messages",      path: null,        active: false, title: t("common.comingSoon") },
+    { icon: "🔔", key: "notifications", path: null,        active: false, title: t("common.comingSoon") },
+  ];
+
+  // Ресепшен: операционка (очередь/запись/касса), без управленческих
+  // разделов (подписки, документы, услуги/цены) — те только у директора.
+  const receptionistNavItems = [
+    { icon: "🏠", key: "home",          path: "/reception", active: true,  title: t("receptionDashboard.title") },
+    { icon: "👥", key: "patients",      path: "/patients", active: true,  title: t("patientList.title") },
+    { icon: "📅", key: "schedule",      path: "/schedule", active: true,  title: t("schedule.title") },
+    { icon: "🦷", key: "appointments",  path: "/appointments",  active: true, title: t("appointmentsPage.title") },
+    { icon: "👨‍⚕️", key: "doctors",      path: "/doctors",       active: true, title: t("doctorsPage.title") },
+    { icon: "💳", key: "cashier",       path: "/cashier",  active: true,  title: t("cashier.title") },
     { icon: "💬", key: "messages",      path: null,        active: false, title: t("common.comingSoon") },
     { icon: "🔔", key: "notifications", path: null,        active: false, title: t("common.comingSoon") },
   ];
@@ -47,8 +58,10 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
 
   const navItems = isDoctor
     ? doctorNavItems
-    : isAdmin
-    ? adminNavItems
+    : isManager
+    ? managerNavItems
+    : isReceptionist
+    ? receptionistNavItems
     : clinic?.role === UserRole.Cashier
     ? cashierNavItems
     : [];

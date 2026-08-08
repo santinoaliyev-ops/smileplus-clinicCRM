@@ -87,6 +87,7 @@
     "openAppointment": "Open appointment",
     "addPatient": "Add patient",
     "free": "Free",
+    "premium": "Premium",
     "load": {
       "low": "Low load",
       "mid": "Medium load",
@@ -211,6 +212,9 @@
     "invalidAmount": "Enter a valid amount",
     "overpayment": "Amount exceeds remaining ({{remaining}} ₼)",
     "paymentError": "Payment failed"
+  },
+  "doctorInvoices": {
+    "title": "My Invoices"
   },
   "patientCard": {
     "toothChart": "Tooth chart",
@@ -368,6 +372,9 @@
     "manager": "Manager",
     "cashier": "Cashier",
     "accountant": "Accountant"
+  },
+  "receptionDashboard": {
+    "title": "Reception"
   },
   "adminDashboard": {
     "title": "Home",

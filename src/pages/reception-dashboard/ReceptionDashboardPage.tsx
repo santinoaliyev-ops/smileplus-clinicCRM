@@ -7,11 +7,7 @@ import {
   useClinicDay,
   useClinicDoctors,
 } from "@/features/schedule/hooks/useSchedule";
-import { useCashierInvoices } from "@/features/cashier/hooks/useCashier";
-import {
-  useActivityLog,
-  useDoctorScheduleRules,
-} from "@/features/admin-dashboard/hooks/useAdminDashboard";
+import { useDoctorScheduleRules } from "@/features/admin-dashboard/hooks/useAdminDashboard";
 import { useClinicRooms } from "@/features/clinic-rooms/hooks/useClinicRooms";
 import { computeFreeSlots } from "@/shared/api/schedule/doctor-schedule.service";
 import { DoctorDeskLayout } from "@/pages/doctor-desk/DoctorDeskLayout";
@@ -22,7 +18,12 @@ function timeLabel(iso: string) {
   return new Date(iso).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
 }
 
-export function AdminDashboardPage() {
+/**
+ * Дашборд ресепшена — операционный (очередь, чек-ин, быстрая запись),
+ * без финансовых/управленческих метрик директорского AdminDashboardPage
+ * (нет "неоплаченных счетов", нет "последних действий").
+ */
+export function ReceptionDashboardPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { clinic } = useClinic();
@@ -32,9 +33,7 @@ export function AdminDashboardPage() {
 
   const { data: appointments = [], isLoading } = useClinicDay(today);
   const { data: doctors = [] } = useClinicDoctors();
-  const { data: invoices = [] } = useCashierInvoices();
   const { data: scheduleRules = [] } = useDoctorScheduleRules(clinic?.clinicId);
-  const { data: activity = [], isError: activityUnavailable } = useActivityLog(clinic?.clinicId);
   const { data: rooms = [] } = useClinicRooms(clinic?.clinicId);
 
   const now = new Date();
@@ -73,7 +72,6 @@ export function AdminDashboardPage() {
   }, [doctors, scheduleRules, active, today, nowMin]);
 
   const totalFreeSlots = freeSlotsByDoctor.reduce((s, d) => s + d.slots.length, 0);
-  const unpaidInvoices = invoices.filter((i) => i.status === "sent");
 
   // Кабинет свободен, если у него нет закреплённого врача или тот сейчас не на приёме
   const freeRooms = rooms.filter(
@@ -95,16 +93,15 @@ export function AdminDashboardPage() {
     { label: t("adminDashboard.kpi.late"), value: lateAppointments.length, danger: lateAppointments.length > 0 },
     { label: t("adminDashboard.kpi.freeSlots"), value: totalFreeSlots },
     ...(rooms.length > 0 ? [{ label: t("adminDashboard.kpi.freeRooms"), value: freeRooms.length }] : []),
-    { label: t("adminDashboard.kpi.unpaid"), value: unpaidInvoices.length, danger: unpaidInvoices.length > 0 },
   ];
 
   return (
     <DoctorDeskLayout>
       <div className="flex h-full flex-col gap-4 overflow-y-auto pb-4">
-        <h1 className="text-xl font-extrabold text-gray-900">{t("adminDashboard.title")}</h1>
+        <h1 className="text-xl font-extrabold text-gray-900">{t("receptionDashboard.title")}</h1>
 
         {/* KPI */}
-        <div className="grid grid-cols-3 gap-3 lg:grid-cols-4 xl:grid-cols-7">
+        <div className="grid grid-cols-3 gap-3 lg:grid-cols-6">
           {kpis.map((k) => (
             <div key={k.label} className="rounded-2xl bg-white p-4 shadow-sm">
               <p className="text-xs text-gray-400">{k.label}</p>
@@ -176,25 +173,11 @@ export function AdminDashboardPage() {
               >
                 {t("adminDashboard.actions.findPatient")}
               </button>
-              <button
-                disabled
-                title={t("common.comingSoon")}
-                className="cursor-not-allowed rounded-xl border border-gray-100 py-2.5 text-sm font-medium text-gray-300"
-              >
-                + {t("adminDashboard.actions.createInvoice")}
-              </button>
-              <button
-                disabled
-                title={t("common.comingSoon")}
-                className="cursor-not-allowed rounded-xl border border-gray-100 py-2.5 text-sm font-medium text-gray-300"
-              >
-                + {t("adminDashboard.actions.newCall")}
-              </button>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {/* Очередь */}
           <div className="flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm">
             <div className="shrink-0 border-b border-gray-100 px-4 py-3">
@@ -240,31 +223,6 @@ export function AdminDashboardPage() {
                         </div>
                       </div>
                     ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Последние действия */}
-          <div className="flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm">
-            <div className="shrink-0 border-b border-gray-100 px-4 py-3">
-              <span className="text-sm font-semibold text-gray-800">{t("adminDashboard.recentActivity")}</span>
-            </div>
-            <div className="max-h-64 flex-1 overflow-y-auto p-3">
-              {activityUnavailable ? (
-                <p className="p-3 text-center text-sm text-gray-400">{t("adminDashboard.activityUnavailable")}</p>
-              ) : activity.length === 0 ? (
-                <p className="p-3 text-center text-sm text-gray-400">{t("adminDashboard.noActivity")}</p>
-              ) : (
-                <div className="space-y-2">
-                  {activity.map((a) => (
-                    <div key={a.id} className="text-xs">
-                      <p className="text-gray-700">{a.message}</p>
-                      <p className="text-gray-400">
-                        {new Date(a.createdAt).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
-                      </p>
-                    </div>
-                  ))}
                 </div>
               )}
             </div>

@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { DAY_LOAD_STYLES, DAY_LOAD_LEGEND } from "./schedule-constants";
-import { getDayLoadColorStub } from "./useDayLoadStub";
+import { DAY_LOAD_STYLES, DAY_LOAD_LEGEND, type DayLoadColor } from "./schedule-constants";
 
 const WEEKDAYS_SHORT: Record<string, string[]> = {
   az: ["B.e", "Ç.a", "Ç", "C.a", "C", "Ş", "B"],
@@ -25,14 +24,14 @@ function toKey(d: Date) {
 interface Props {
   selected: Date;
   onSelect: (d: Date) => void;
-  appointmentDays: Set<string>;
+  dayLoad: Map<string, DayLoadColor>;
   viewMonth: Date;
   onPrevMonth: () => void;
   onNextMonth: () => void;
 }
 
 export function MonthLoadCalendar({
-  selected, onSelect, appointmentDays, viewMonth, onPrevMonth, onNextMonth,
+  selected, onSelect, dayLoad, viewMonth, onPrevMonth, onNextMonth,
 }: Props) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language as "az" | "ru" | "en";
@@ -78,8 +77,7 @@ export function MonthLoadCalendar({
           const key = toKey(d);
           const isSelected = key === selectedKey;
           const isToday = key === todayKey;
-          const hasAppts = appointmentDays.has(key);
-          const load = getDayLoadColorStub(key, hasAppts);
+          const load = dayLoad.get(key) ?? "gray";
 
           return (
             <button

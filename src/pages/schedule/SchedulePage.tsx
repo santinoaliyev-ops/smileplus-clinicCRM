@@ -4,14 +4,17 @@ import { useLocation } from "react-router-dom";
 import {
   useClinicDay,
   useClinicDoctors,
-  useClinicMonth,
+  useDoctorMonthLoad,
   useClinicScheduleRealtime,
 } from "@/features/schedule/hooks/useSchedule";
 import { useDoctorExceptions } from "@/features/schedule/hooks/useScheduleExceptions";
+import { useDoctorScheduleRules } from "@/features/admin-dashboard/hooks/useAdminDashboard";
+import { useClinicSubscriptions } from "@/features/subscriptions/hooks/useClinicSubscriptions";
 import { useClinic } from "@/app/providers/clinic";
 import { useDoctorProfile } from "@/features/doctor-dashboard/hooks/useDoctorProfile";
 import { UserRole } from "@/shared/types/auth";
 import { DoctorDeskLayout } from "@/pages/doctor-desk/DoctorDeskLayout";
+import { computeFreeSlots } from "@/shared/api/schedule/doctor-schedule.service";
 
 import { DoctorSelector } from "./DoctorSelector";
 import { DoctorTimeline } from "./DoctorTimeline";
@@ -54,6 +57,8 @@ export function SchedulePage() {
   const { data: doctorProfile } = useDoctorProfile();
   const { data: doctors = [] } = useClinicDoctors();
   const { data: appointments = [], isLoading } = useClinicDay(day);
+  const { data: scheduleRules = [] } = useDoctorScheduleRules(clinic?.clinicId);
+  const { data: subscriptions = [] } = useClinicSubscriptions(clinic?.clinicId);
   useClinicScheduleRealtime();
 
   const visibleDoctors = useMemo(() => {
@@ -70,29 +75,43 @@ export function SchedulePage() {
   }, [visibleDoctors, selectedDoctorId]);
 
   // загрузка календаря считается по выбранному врачу, а не по всей клинике
-  const { data: monthDates = [] } = useClinicMonth(
+  const dayLoad = useDoctorMonthLoad(
+    selectedDoctor?.id,
     viewMonth.getFullYear(),
-    viewMonth.getMonth(),
-    selectedDoctor?.id
+    viewMonth.getMonth()
   );
   const { data: doctorExceptions = [] } = useDoctorExceptions(selectedDoctor?.id);
 
   const dateLabel = `${WEEKDAYS[lang]?.[day.getDay()] ?? ""}, ${day.getDate()} ${MONTHS[lang]?.[day.getMonth()] ?? ""}`;
-  const appointmentDays = useMemo(() => new Set(monthDates), [monthDates]);
 
   const doctorAppointments = useMemo(
     () => appointments.filter((a) => a.doctorId === selectedDoctor?.id),
     [appointments, selectedDoctor]
   );
 
-  const dayStats = useMemo(
-    () => ({
-      total: doctorAppointments.filter((a) => !["cancelled"].includes(a.status)).length,
-      free: 0, // TODO: из doctor_schedule.slot_duration после подключения реальной логики
-      premium: 0,
-    }),
-    [doctorAppointments]
-  );
+  const dayStats = useMemo(() => {
+    const activeAppointments = doctorAppointments.filter((a) => a.status !== "cancelled");
+
+    const isToday = day.toDateString() === new Date().toDateString();
+    const rule = selectedDoctor
+      ? scheduleRules.find((r) => r.doctorId === selectedDoctor.id && r.dayOfWeek === day.getDay())
+      : undefined;
+    const booked = activeAppointments.map((a) => {
+      const d = new Date(a.scheduledAt);
+      return { startMin: d.getHours() * 60 + d.getMinutes(), durationMin: a.durationMin };
+    });
+    const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
+    const free = computeFreeSlots(rule, booked, isToday ? nowMin : null).length;
+
+    const premiumPatientIds = new Set(
+      subscriptions
+        .filter((s) => s.status === "active" && s.plan === "premium")
+        .map((s) => s.patientId)
+    );
+    const premium = activeAppointments.filter((a) => premiumPatientIds.has(a.patient.id)).length;
+
+    return { total: activeAppointments.length, free, premium };
+  }, [doctorAppointments, day, selectedDoctor, scheduleRules, subscriptions]);
 
   const handleDaySelect = (d: Date) => {
     setDay(d);
@@ -107,7 +126,7 @@ export function SchedulePage() {
           <MonthLoadCalendar
             selected={day}
             onSelect={handleDaySelect}
-            appointmentDays={appointmentDays}
+            dayLoad={dayLoad}
             viewMonth={viewMonth}
             onPrevMonth={() => setViewMonth((m) => addMonths(m, -1))}
             onNextMonth={() => setViewMonth((m) => addMonths(m, 1))}

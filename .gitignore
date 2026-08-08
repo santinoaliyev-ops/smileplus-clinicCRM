@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Secrets — supabase/.env holds SERVICE_ROLE_KEY (full DB access, bypasses RLS)
+supabase/.env

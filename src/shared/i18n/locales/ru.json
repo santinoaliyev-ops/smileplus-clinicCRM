@@ -87,6 +87,7 @@
     "openAppointment": "Открыть приём",
     "addPatient": "Записать пациента",
     "free": "Свободно",
+    "premium": "Premium",
     "load": {
       "low": "Низкая загрузка",
       "mid": "Средняя загрузка",
@@ -211,6 +212,9 @@
     "invalidAmount": "Введите корректную сумму",
     "overpayment": "Сумма превышает остаток ({{remaining}} ₼)",
     "paymentError": "Не удалось провести оплату"
+  },
+  "doctorInvoices": {
+    "title": "Мои наряды"
   },
   "patientCard": {
     "toothChart": "Зубная формула",
@@ -368,6 +372,9 @@
     "manager": "Директор",
     "cashier": "Кассир",
     "accountant": "Бухгалтер"
+  },
+  "receptionDashboard": {
+    "title": "Ресепшн"
   },
   "adminDashboard": {
     "title": "Главная",

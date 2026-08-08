@@ -11,6 +11,7 @@ export function RoleHome() {
     case UserRole.Doctor:
         return <Navigate to="/doctor" replace />;
     case UserRole.Receptionist:
+        return <Navigate to="/reception" replace />;
     case UserRole.Manager:
         return <Navigate to="/admin" replace />;
     case UserRole.Cashier:

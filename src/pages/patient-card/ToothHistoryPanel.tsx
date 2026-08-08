@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useToothHistory } from "@/features/patient-card/hooks/useToothHistory";
+import {
+  usePatientFiles,
+  useUploadPatientFile,
+  useDeletePatientFile,
+} from "@/features/patient-card/hooks/usePatientFiles";
+import { useClinic } from "@/app/providers/clinic";
 import {
   CONDITION_COLORS,
   CONDITION_LABELS,
   type ConditionCode,
 } from "@/shared/ui/tooth-chart";
+import { PatientFileGrid } from "./PatientFileGrid";
 
 interface Props {
   patientId: string;
@@ -29,8 +36,34 @@ export function ToothHistoryPanel({
   const { data: history, isLoading } = useToothHistory(patientId, toothNumber);
   const [tab, setTab] = useState<Tab>("history");
 
+  const { clinic } = useClinic();
+  const { data: files = [], isLoading: filesLoading } = usePatientFiles(patientId);
+  const upload = useUploadPatientFile(patientId);
+  const remove = useDeletePatientFile(patientId);
+  const fileInput = useRef<HTMLInputElement>(null);
+
   const events = history?.events ?? [];
   const procedureEvents = events.filter((e) => e.eventType === "treatment");
+
+  const toothFileType = tab === "photos" ? "photo" : "xray";
+  const toothFiles = useMemo(
+    () => files.filter((f) => f.fileType === toothFileType && f.toothNumber === toothNumber),
+    [files, toothFileType, toothNumber]
+  );
+
+  const handleFiles = (fileList: FileList | null) => {
+    if (!fileList || !clinic || (tab !== "photos" && tab !== "xray")) return;
+    Array.from(fileList).forEach((file) => {
+      upload.mutate({
+        clinicId: clinic.clinicId,
+        uploadedBy: clinic.clinicStaffId,
+        fileType: toothFileType,
+        file,
+        toothNumber,
+      });
+    });
+    if (fileInput.current) fileInput.current.value = "";
+  };
 
   const TABS: { key: Tab; label: string }[] = [
     { key: "history", label: t("toothHistory.tabs.history") },
@@ -121,34 +154,65 @@ export function ToothHistoryPanel({
       </div>
 
       {/* Табы */}
-      <div className="flex shrink-0 border-b border-gray-100 px-2">
-        {TABS.map((tb) => (
-          <button
-            key={tb.key}
-            onClick={() => setTab(tb.key)}
-            className={`px-3 py-2 text-xs font-medium transition ${
-              tab === tb.key
-                ? "border-b-2 border-teal-600 text-teal-700"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-          >
-            {tb.label}
-          </button>
-        ))}
+      <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-2">
+        <div className="flex">
+          {TABS.map((tb) => (
+            <button
+              key={tb.key}
+              onClick={() => setTab(tb.key)}
+              className={`px-3 py-2 text-xs font-medium transition ${
+                tab === tb.key
+                  ? "border-b-2 border-teal-600 text-teal-700"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              {tb.label}
+            </button>
+          ))}
+        </div>
+        {(tab === "photos" || tab === "xray") && (
+          <div className="mr-1 flex shrink-0 items-center">
+            <button
+              onClick={() => fileInput.current?.click()}
+              disabled={upload.isPending}
+              className="rounded-lg bg-teal-50 px-2 py-1 text-xs font-semibold text-teal-700 hover:bg-teal-100 disabled:opacity-40"
+            >
+              + {t("doctorDesk.add")}
+            </button>
+            <input
+              ref={fileInput}
+              type="file"
+              multiple
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => handleFiles(e.target.files)}
+            />
+          </div>
+        )}
       </div>
 
       {/* Контент */}
       <div className="max-h-72 flex-1 overflow-y-auto">
-        {isLoading ? (
-          <div className="p-4 text-center text-sm text-gray-400">{t("common.loading")}</div>
-        ) : tab === "history" ? (
-          renderEventList(events)
+        {tab === "history" ? (
+          isLoading ? (
+            <div className="p-4 text-center text-sm text-gray-400">{t("common.loading")}</div>
+          ) : (
+            renderEventList(events)
+          )
         ) : tab === "procedures" ? (
-          renderEventList(procedureEvents)
+          isLoading ? (
+            <div className="p-4 text-center text-sm text-gray-400">{t("common.loading")}</div>
+          ) : (
+            renderEventList(procedureEvents)
+          )
         ) : (
-          <div className="flex flex-col items-center gap-1 p-8 text-center text-sm text-gray-400">
-            <span className="text-2xl">{tab === "photos" ? "📷" : "🩻"}</span>
-            <span>{t("toothHistory.filesComingSoon")}</span>
+          <div className="p-3">
+            <PatientFileGrid
+              fileType={toothFileType}
+              files={toothFiles}
+              isLoading={filesLoading}
+              onDelete={(f) => remove.mutate({ id: f.id, storagePath: f.storagePath })}
+            />
           </div>
         )}
       </div>

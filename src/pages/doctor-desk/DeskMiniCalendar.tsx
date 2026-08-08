@@ -40,6 +40,8 @@ function toKey(d: Date) {
 export function DeskMiniCalendar({ selected, onSelect, doctorId, viewMonth, onPrevMonth, onNextMonth }: Props) {
   const { i18n } = useTranslation();
   const lang = i18n.language as "az"|"ru"|"en";
+  const weekdaysList = WEEKDAYS[lang] ?? WEEKDAYS.ru;
+  const weekdaysMonFirst = [...weekdaysList.slice(1), weekdaysList[0]];
 
   // Загружаем приёмы за месяц для индикации
   const { data: monthAppts = [] } = useQuery({
@@ -99,10 +101,10 @@ export function DeskMiniCalendar({ selected, onSelect, doctorId, viewMonth, onPr
         <button onClick={onNextMonth} className="rounded p-1 text-gray-400 hover:bg-gray-100">›</button>
       </div>
 
-      {/* Дни недели */}
+      {/* Дни недели — сетка ниже начинается с понедельника (dayOfWeekMon), сдвигаем воскресенье в конец */}
       <div className="mb-1 grid grid-cols-7 gap-0.5">
-        {["Пн","Вт","Ср","Чт","Пт","Сб","Вс"].map((d) => (
-          <div key={d} className="text-center text-[10px] font-semibold text-gray-400">{d}</div>
+        {weekdaysMonFirst.map((d, i) => (
+          <div key={i} className="text-center text-[10px] font-semibold text-gray-400">{d}</div>
         ))}
       </div>
 
