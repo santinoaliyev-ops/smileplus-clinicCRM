@@ -16,6 +16,8 @@ export function RoleHome() {
         return <Navigate to="/admin" replace />;
     case UserRole.Cashier:
       return <Navigate to="/cashier" replace />;
+    case UserRole.Accountant:
+      return <Navigate to="/accounting" replace />;
     default:
       return <Navigate to="/dashboard" replace />;
   }

@@ -376,6 +376,37 @@
   "receptionDashboard": {
     "title": "Qeydiyyat"
   },
+  "accountingDashboard": {
+    "title": "Maliyyə",
+    "needsAttention": "Diqqət tələb edir",
+    "noOutstanding": "Borc yoxdur",
+    "kpi": {
+      "revenueToday": "Bu günkü gəlir",
+      "revenueMonth": "Aylıq gəlir",
+      "receivables": "Debitor borcu",
+      "unpaid": "Ödənilməmiş hesablar",
+      "partial": "Qismən ödənilib"
+    }
+  },
+  "accountingInvoices": {
+    "title": "Klinikanın hesabları"
+  },
+  "accountingReports": {
+    "title": "Hesabatlar",
+    "empty": "Məlumat yoxdur",
+    "uncategorized": "Sahə göstərilməyib",
+    "billed": "Hesablanıb",
+    "collected": "Alınıb",
+    "invoiceCount": "{{count}} hesab",
+    "tabs": {
+      "day": "Günlər üzrə",
+      "doctor": "Həkimlər üzrə",
+      "category": "Sahələr üzrə"
+    }
+  },
+  "accountingDocuments": {
+    "title": "Maliyyə sənədləri"
+  },
   "adminDashboard": {
     "title": "Əsas",
     "workspaceTitle": "Klinikanın iş masası",

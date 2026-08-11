@@ -376,6 +376,37 @@
   "receptionDashboard": {
     "title": "Reception"
   },
+  "accountingDashboard": {
+    "title": "Finance",
+    "needsAttention": "Needs attention",
+    "noOutstanding": "No outstanding balances",
+    "kpi": {
+      "revenueToday": "Revenue today",
+      "revenueMonth": "Revenue this month",
+      "receivables": "Receivables",
+      "unpaid": "Unpaid invoices",
+      "partial": "Partially paid"
+    }
+  },
+  "accountingInvoices": {
+    "title": "Clinic invoices"
+  },
+  "accountingReports": {
+    "title": "Reports",
+    "empty": "No data",
+    "uncategorized": "Uncategorized",
+    "billed": "Billed",
+    "collected": "Collected",
+    "invoiceCount": "{{count}} invoices",
+    "tabs": {
+      "day": "By day",
+      "doctor": "By doctor",
+      "category": "By specialty"
+    }
+  },
+  "accountingDocuments": {
+    "title": "Financial documents"
+  },
   "adminDashboard": {
     "title": "Home",
     "workspaceTitle": "Clinic workspace",

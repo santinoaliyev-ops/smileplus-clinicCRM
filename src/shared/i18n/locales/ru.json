@@ -376,6 +376,37 @@
   "receptionDashboard": {
     "title": "Ресепшн"
   },
+  "accountingDashboard": {
+    "title": "Финансы",
+    "needsAttention": "Требует внимания",
+    "noOutstanding": "Задолженностей нет",
+    "kpi": {
+      "revenueToday": "Выручка сегодня",
+      "revenueMonth": "Выручка за месяц",
+      "receivables": "Дебиторская задолженность",
+      "unpaid": "Неоплаченных счетов",
+      "partial": "Частично оплачено"
+    }
+  },
+  "accountingInvoices": {
+    "title": "Счета клиники"
+  },
+  "accountingReports": {
+    "title": "Отчёты",
+    "empty": "Нет данных",
+    "uncategorized": "Без отрасли",
+    "billed": "Выставлено",
+    "collected": "Получено",
+    "invoiceCount": "{{count}} счетов",
+    "tabs": {
+      "day": "По дням",
+      "doctor": "По врачам",
+      "category": "По отраслям"
+    }
+  },
+  "accountingDocuments": {
+    "title": "Финансовые документы"
+  },
   "adminDashboard": {
     "title": "Главная",
     "workspaceTitle": "Рабочий стол клиники",

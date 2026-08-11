@@ -16,6 +16,7 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
   const isDoctor = clinic?.role === UserRole.Doctor;
   const isManager = clinic?.role === UserRole.Manager;
   const isReceptionist = clinic?.role === UserRole.Receptionist;
+  const isAccountant = clinic?.role === UserRole.Accountant;
 
   const doctorNavItems = [
     { icon: "🦷", key: "desk",     path: "/doctor",   active: true, title: t("doctorDesk.title") },
@@ -56,12 +57,24 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
     { icon: "💳", key: "cashier", path: "/cashier", active: true, title: t("cashier.title") },
   ];
 
+  // Бухгалтер: только финансовый учёт (счета/отчёты/подписки/фин.документы),
+  // без пациентов/расписания/приёмов/врачей — вне его зоны по концепции роли.
+  const accountantNavItems = [
+    { icon: "🏠", key: "home",          path: "/accounting",           active: true, title: t("accountingDashboard.title") },
+    { icon: "🧾", key: "invoices",      path: "/accounting/invoices",  active: true, title: t("accountingInvoices.title") },
+    { icon: "📊", key: "reports",       path: "/accounting/reports",   active: true, title: t("accountingReports.title") },
+    { icon: "⭐", key: "subscriptions", path: "/subscriptions",        active: true, title: t("subscriptionsPage.title") },
+    { icon: "📦", key: "documents",     path: "/accounting/documents", active: true, title: t("accountingDocuments.title") },
+  ];
+
   const navItems = isDoctor
     ? doctorNavItems
     : isManager
     ? managerNavItems
     : isReceptionist
     ? receptionistNavItems
+    : isAccountant
+    ? accountantNavItems
     : clinic?.role === UserRole.Cashier
     ? cashierNavItems
     : [];

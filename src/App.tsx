@@ -23,6 +23,10 @@ import { AdminServicesPage } from "@/pages/admin-services";
 import { SelectClinicPage } from "@/pages/select-clinic";
 import { DoctorInvoicesPage } from "@/pages/doctor-invoices";
 import { ReceptionDashboardPage } from "@/pages/reception-dashboard";
+import { AccountingDashboardPage } from "@/pages/accounting-dashboard";
+import { AccountingInvoicesPage } from "@/pages/accounting-invoices";
+import { AccountingReportsPage } from "@/pages/accounting-reports";
+import { AccountingDocumentsPage } from "@/pages/accounting-documents";
 
 export default function App() {
   return (
@@ -42,8 +46,15 @@ export default function App() {
         <Route element={<RequireRole roles={[UserRole.Manager]} />}>
           <Route path="/admin" element={<AdminDashboardPage />} />
           <Route path="/admin/services" element={<AdminServicesPage />} />
-          <Route path="/subscriptions" element={<SubscriptionsPage />} />
           <Route path="/documents" element={<ClinicDocumentsPage />} />
+        </Route>
+
+        <Route element={<RequireRole roles={[UserRole.Manager, UserRole.Accountant]} />}>
+          <Route path="/subscriptions" element={<SubscriptionsPage />} />
+          <Route path="/accounting" element={<AccountingDashboardPage />} />
+          <Route path="/accounting/invoices" element={<AccountingInvoicesPage />} />
+          <Route path="/accounting/reports" element={<AccountingReportsPage />} />
+          <Route path="/accounting/documents" element={<AccountingDocumentsPage />} />
         </Route>
 
         <Route path="/patients" element={<PatientListPage />} />

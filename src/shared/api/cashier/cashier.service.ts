@@ -2,6 +2,10 @@ import { supabase } from "@/shared/lib/supabase";
 
 export interface CashierInvoiceItem {
   procedureName: string;
+  categoryCode: string | null;
+  categoryNameAz: string | null;
+  categoryNameRu: string | null;
+  categoryNameEn: string | null;
   toothNumbers: number[];
   amountTotal: number;
   amountCovered: number;
@@ -81,6 +85,10 @@ class CashierService {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       items: (inv.items ?? []).map((it: any) => ({
         procedureName: it.procedure_name ?? "—",
+        categoryCode: it.category_code ?? null,
+        categoryNameAz: it.category_name_az ?? null,
+        categoryNameRu: it.category_name_ru ?? null,
+        categoryNameEn: it.category_name_en ?? null,
         toothNumbers: it.tooth_numbers ?? [],
         amountTotal: num(it.amount_total),
         amountCovered: num(it.amount_covered),
