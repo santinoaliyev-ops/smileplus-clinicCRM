@@ -414,6 +414,18 @@
     "title": "Xərclər",
     "add": "Xərc əlavə et",
     "empty": "Xərc yoxdur",
+    "approvalThreshold": "Təsdiq həddi",
+    "approvalThresholdPlaceholder": "Məbləğ",
+    "approvalThresholdNotSet": "Təyin edilməyib",
+    "approve": "Təsdiqlə",
+    "reject": "Rədd et",
+    "confirmReject": "Rədd etməni təsdiqlə",
+    "rejectionReasonPlaceholder": "Rədd səbəbi",
+    "status": {
+      "pending": "Təsdiq gözləyir",
+      "approved": "Təsdiqləndi",
+      "rejected": "Rədd edildi"
+    },
     "fields": {
       "amount": "Məbləğ",
       "vendor": "Təchizatçı",
@@ -449,6 +461,39 @@
       "percent": "Faiz",
       "fixed": "Sabit",
       "notConfigured": "Təyin edilməyib"
+    }
+  },
+  "accountingBank": {
+    "title": "Bank",
+    "addAccount": "Hesab əlavə et",
+    "addTransaction": "Əməliyyat əlavə et",
+    "noAccounts": "Bank hesabı yoxdur",
+    "noTransactions": "Əməliyyat yoxdur",
+    "noCandidates": "Uyğunlaşdırılmamış qeyd yoxdur",
+    "matched": "Uyğunlaşdırılıb",
+    "match": "Uyğunlaşdır",
+    "unmatch": "Uyğunlaşdırmanı ləğv et",
+    "matchedToPayment": "Ödəniş",
+    "matchedToExpense": "Xərc",
+    "fields": {
+      "name": "Hesabın adı",
+      "bankName": "Bank",
+      "accountNumber": "Hesab nömrəsi",
+      "currency": "Valyuta",
+      "openingBalance": "Başlanğıc qalıq",
+      "amount": "Məbləğ",
+      "description": "Təsvir"
+    },
+    "direction": {
+      "in": "Mədaxil",
+      "out": "Məxaric"
+    },
+    "summary": {
+      "opening": "Başlanğıc qalıq",
+      "in": "Mədaxil",
+      "out": "Məxaric",
+      "balance": "Qalıq",
+      "unmatchedCount": "Uyğunlaşdırılmayıb: {{count}}"
     }
   },
   "adminDashboard": {

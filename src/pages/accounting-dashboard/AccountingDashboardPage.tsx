@@ -30,7 +30,7 @@ export function AccountingDashboardPage() {
     }
 
     const expensesMonth = expenses
-      .filter((e) => new Date(e.expenseDate).getTime() >= monthStart)
+      .filter((e) => e.status === "approved" && new Date(e.expenseDate).getTime() >= monthStart)
       .reduce((s, e) => s + e.amount, 0);
 
     const unpaid = invoices.filter((i) => i.status === "sent" && i.totalPaid === 0);

@@ -414,6 +414,18 @@
     "title": "Expenses",
     "add": "Add expense",
     "empty": "No expenses",
+    "approvalThreshold": "Approval threshold",
+    "approvalThresholdPlaceholder": "Amount",
+    "approvalThresholdNotSet": "Not set",
+    "approve": "Approve",
+    "reject": "Reject",
+    "confirmReject": "Confirm rejection",
+    "rejectionReasonPlaceholder": "Rejection reason",
+    "status": {
+      "pending": "Pending approval",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
     "fields": {
       "amount": "Amount",
       "vendor": "Vendor",
@@ -449,6 +461,39 @@
       "percent": "Percent",
       "fixed": "Fixed",
       "notConfigured": "Not configured"
+    }
+  },
+  "accountingBank": {
+    "title": "Bank",
+    "addAccount": "Add account",
+    "addTransaction": "Add transaction",
+    "noAccounts": "No bank accounts yet",
+    "noTransactions": "No transactions",
+    "noCandidates": "No unmatched records",
+    "matched": "Matched",
+    "match": "Match",
+    "unmatch": "Unmatch",
+    "matchedToPayment": "Payment",
+    "matchedToExpense": "Expense",
+    "fields": {
+      "name": "Account name",
+      "bankName": "Bank",
+      "accountNumber": "Account number",
+      "currency": "Currency",
+      "openingBalance": "Opening balance",
+      "amount": "Amount",
+      "description": "Description"
+    },
+    "direction": {
+      "in": "Incoming",
+      "out": "Outgoing"
+    },
+    "summary": {
+      "opening": "Opening balance",
+      "in": "Incoming",
+      "out": "Outgoing",
+      "balance": "Balance",
+      "unmatchedCount": "Unmatched: {{count}}"
     }
   },
   "adminDashboard": {

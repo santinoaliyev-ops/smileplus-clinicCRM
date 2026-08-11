@@ -414,6 +414,18 @@
     "title": "Расходы",
     "add": "Добавить расход",
     "empty": "Расходов нет",
+    "approvalThreshold": "Порог согласования",
+    "approvalThresholdPlaceholder": "Сумма",
+    "approvalThresholdNotSet": "Не задан",
+    "approve": "Утвердить",
+    "reject": "Отклонить",
+    "confirmReject": "Подтвердить отклонение",
+    "rejectionReasonPlaceholder": "Причина отклонения",
+    "status": {
+      "pending": "На согласовании",
+      "approved": "Утверждён",
+      "rejected": "Отклонён"
+    },
     "fields": {
       "amount": "Сумма",
       "vendor": "Поставщик",
@@ -449,6 +461,39 @@
       "percent": "Процент",
       "fixed": "Фиксированная",
       "notConfigured": "Не настроено"
+    }
+  },
+  "accountingBank": {
+    "title": "Банк",
+    "addAccount": "Добавить счёт",
+    "addTransaction": "Добавить операцию",
+    "noAccounts": "Банковских счетов пока нет",
+    "noTransactions": "Операций нет",
+    "noCandidates": "Нет несопоставленных записей",
+    "matched": "Сопоставлено",
+    "match": "Сопоставить",
+    "unmatch": "Отменить сопоставление",
+    "matchedToPayment": "Платёж",
+    "matchedToExpense": "Расход",
+    "fields": {
+      "name": "Название счёта",
+      "bankName": "Банк",
+      "accountNumber": "Номер счёта",
+      "currency": "Валюта",
+      "openingBalance": "Начальный остаток",
+      "amount": "Сумма",
+      "description": "Описание"
+    },
+    "direction": {
+      "in": "Приход",
+      "out": "Расход"
+    },
+    "summary": {
+      "opening": "Начальный остаток",
+      "in": "Приход",
+      "out": "Расход",
+      "balance": "Остаток",
+      "unmatchedCount": "Несопоставлено: {{count}}"
     }
   },
   "adminDashboard": {

@@ -29,3 +29,21 @@ export function useDeleteExpense(clinicId: string | undefined) {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["expenses", clinicId] }),
   });
 }
+
+export function useApproveExpense(clinicId: string | undefined) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, approvedBy }: { id: string; approvedBy: string }) =>
+      expensesService.approve(id, approvedBy),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["expenses", clinicId] }),
+  });
+}
+
+export function useRejectExpense(clinicId: string | undefined) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, approvedBy, reason }: { id: string; approvedBy: string; reason: string }) =>
+      expensesService.reject(id, approvedBy, reason),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["expenses", clinicId] }),
+  });
+}

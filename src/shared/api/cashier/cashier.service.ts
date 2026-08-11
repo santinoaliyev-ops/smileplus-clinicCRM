@@ -14,6 +14,7 @@ export interface CashierInvoiceItem {
 }
 
 export interface CashierPayment {
+  id: string;
   amount: number;
   paymentMethod: string;
   paidAt: string;
@@ -99,6 +100,7 @@ class CashierService {
       })),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       payments: (inv.payments ?? []).map((p: any) => ({
+        id: p.id,
         amount: num(p.amount),
         paymentMethod: p.payment_method,
         paidAt: p.paid_at,
