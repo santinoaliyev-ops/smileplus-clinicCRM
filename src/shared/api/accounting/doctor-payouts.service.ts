@@ -1,4 +1,5 @@
 import { supabase } from "@/shared/lib/supabase";
+import { auditLogService } from "@/shared/api/accounting/audit-log.service";
 
 export type PayoutType = "percent" | "fixed";
 
@@ -32,7 +33,12 @@ class DoctorPayoutsService {
     }));
   }
 
-  async updateRate(doctorId: string, input: UpdateDoctorPayoutRateInput): Promise<void> {
+  async updateRate(
+    doctorId: string,
+    clinicId: string,
+    actorId: string,
+    input: UpdateDoctorPayoutRateInput
+  ): Promise<void> {
     const { error } = await supabase
       .from("doctors")
       .update({
@@ -43,6 +49,11 @@ class DoctorPayoutsService {
       .eq("id", doctorId);
 
     if (error) throw error;
+
+    await auditLogService.log(clinicId, actorId, "doctor_payout_rate", doctorId, "update", {
+      payoutType: input.payoutType,
+      rate: input.payoutType === "percent" ? input.payoutPercent : input.payoutFixedAmount,
+    });
   }
 }
 

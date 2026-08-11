@@ -1,4 +1,5 @@
 import { supabase } from "@/shared/lib/supabase";
+import { auditLogService } from "@/shared/api/accounting/audit-log.service";
 
 class FinanceSettingsService {
   async getThreshold(clinicId: string): Promise<number | null> {
@@ -13,11 +14,15 @@ class FinanceSettingsService {
     return Number(data.expense_approval_threshold);
   }
 
-  async setThreshold(clinicId: string, value: number | null): Promise<void> {
+  async setThreshold(clinicId: string, value: number | null, actorId: string): Promise<void> {
     const { error } = await supabase
       .from("clinic_finance_settings")
       .upsert({ clinic_id: clinicId, expense_approval_threshold: value }, { onConflict: "clinic_id" });
     if (error) throw error;
+
+    await auditLogService.log(clinicId, actorId, "finance_settings", null, "update", {
+      expenseApprovalThreshold: value,
+    });
   }
 }
 

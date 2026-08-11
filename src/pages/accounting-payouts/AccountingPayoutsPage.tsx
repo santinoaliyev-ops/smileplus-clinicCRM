@@ -83,9 +83,10 @@ export function AccountingPayoutsPage() {
 
   const saveEdit = async (doctorId: string) => {
     const rateNum = parseFloat(draft.rate);
-    if (isNaN(rateNum) || rateNum < 0) return;
+    if (isNaN(rateNum) || rateNum < 0 || !clinic) return;
     await updateRate.mutateAsync({
       doctorId,
+      actorId: clinic.clinicStaffId,
       input: {
         payoutType: draft.payoutType,
         payoutPercent: draft.payoutType === "percent" ? rateNum : null,

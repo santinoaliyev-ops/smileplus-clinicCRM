@@ -13,7 +13,8 @@ export function useApprovalThreshold(clinicId: string | undefined) {
 export function useSetApprovalThreshold(clinicId: string | undefined) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (value: number | null) => financeSettingsService.setThreshold(clinicId!, value),
+    mutationFn: ({ value, actorId }: { value: number | null; actorId: string }) =>
+      financeSettingsService.setThreshold(clinicId!, value, actorId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["expense-approval-threshold", clinicId] });
     },

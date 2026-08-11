@@ -13,6 +13,7 @@ import {
   useMatchBankTransaction,
   useUnmatchBankTransaction,
 } from "@/features/accounting/hooks/useBank";
+import { useClosedPeriods } from "@/features/accounting/hooks/usePeriodClosing";
 import type { BankTransactionDirection } from "@/shared/api/accounting/bank.service";
 import { UserRole } from "@/shared/types/auth";
 import { DoctorDeskLayout } from "@/pages/doctor-desk/DoctorDeskLayout";
@@ -60,6 +61,14 @@ export function AccountingBankPage() {
   });
 
   const [matchingId, setMatchingId] = useState<string | null>(null);
+  const [periodBlockedError, setPeriodBlockedError] = useState(false);
+
+  const { data: closedPeriods = [] } = useClosedPeriods(clinic?.clinicId);
+  const closedMonthSet = useMemo(
+    () => new Set(closedPeriods.map((p) => p.periodMonth.slice(0, 7))),
+    [closedPeriods]
+  );
+  const isDateInClosedPeriod = (dateStr: string) => closedMonthSet.has(dateStr.slice(0, 7));
 
   const allPayments = useMemo(
     () =>
@@ -101,13 +110,16 @@ export function AccountingBankPage() {
   }, [transactions, activeAccount]);
 
   const submitAccount = async () => {
-    if (!accountForm.name.trim()) return;
+    if (!accountForm.name.trim() || !clinic) return;
     await createAccount.mutateAsync({
-      name: accountForm.name,
-      bankName: accountForm.bankName || null,
-      accountNumber: accountForm.accountNumber || null,
-      currency: accountForm.currency || "AZN",
-      openingBalance: parseFloat(accountForm.openingBalance) || 0,
+      actorId: clinic.clinicStaffId,
+      input: {
+        name: accountForm.name,
+        bankName: accountForm.bankName || null,
+        accountNumber: accountForm.accountNumber || null,
+        currency: accountForm.currency || "AZN",
+        openingBalance: parseFloat(accountForm.openingBalance) || 0,
+      },
     });
     setAccountForm({ name: "", bankName: "", accountNumber: "", currency: "AZN", openingBalance: "" });
     setShowAccountForm(false);
@@ -116,6 +128,11 @@ export function AccountingBankPage() {
   const submitTx = async () => {
     const amount = parseFloat(txForm.amount);
     if (!amount || amount <= 0 || !activeAccountId || !clinic) return;
+    if (isDateInClosedPeriod(txForm.transactionDate)) {
+      setPeriodBlockedError(true);
+      return;
+    }
+    setPeriodBlockedError(false);
     await createTx.mutateAsync({
       bankAccountId: activeAccountId,
       clinicId: clinic.clinicId,
@@ -123,6 +140,7 @@ export function AccountingBankPage() {
       amount,
       transactionDate: txForm.transactionDate,
       description: txForm.description || null,
+      actorId: clinic.clinicStaffId,
     });
     setTxForm({ direction: "in", amount: "", transactionDate: todayStr(), description: "" });
     setShowTxForm(false);
@@ -296,6 +314,11 @@ export function AccountingBankPage() {
                   >
                     {t("common.cancel")}
                   </button>
+                  {periodBlockedError && (
+                    <span className="self-center text-xs font-semibold text-red-500">
+                      {t("accountingBank.periodClosedError")}
+                    </span>
+                  )}
                 </div>
               </div>
             )}
@@ -328,32 +351,59 @@ export function AccountingBankPage() {
                             {tx.description ?? "—"}
                           </div>
                           <span className="w-24 shrink-0 text-right text-sm font-bold text-gray-900">{tx.amount} {activeAccount?.currency}</span>
-                          {isMatched ? (
+                          {isDateInClosedPeriod(tx.transactionDate) ? (
                             <>
-                              <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600">
-                                {t("accountingBank.matched")}
+                              {isMatched && (
+                                <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600">
+                                  {t("accountingBank.matched")}
+                                </span>
+                              )}
+                              <span className="shrink-0 text-gray-300" title={t("accountingBank.periodClosedError")}>
+                                🔒
                               </span>
-                              <button
-                                onClick={() => unmatchTx.mutate(tx.id)}
-                                className="shrink-0 text-xs font-semibold text-gray-400 hover:text-red-500"
-                              >
-                                {t("accountingBank.unmatch")}
-                              </button>
                             </>
                           ) : (
-                            <button
-                              onClick={() => setMatchingId(matchingId === tx.id ? null : tx.id)}
-                              className="shrink-0 text-xs font-semibold text-teal-600 hover:text-teal-700"
-                            >
-                              {t("accountingBank.match")}
-                            </button>
+                            <>
+                              {isMatched ? (
+                                <>
+                                  <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600">
+                                    {t("accountingBank.matched")}
+                                  </span>
+                                  <button
+                                    onClick={() =>
+                                      clinic &&
+                                      unmatchTx.mutate({ id: tx.id, clinicId: clinic.clinicId, actorId: clinic.clinicStaffId })
+                                    }
+                                    className="shrink-0 text-xs font-semibold text-gray-400 hover:text-red-500"
+                                  >
+                                    {t("accountingBank.unmatch")}
+                                  </button>
+                                </>
+                              ) : (
+                                <button
+                                  onClick={() => setMatchingId(matchingId === tx.id ? null : tx.id)}
+                                  className="shrink-0 text-xs font-semibold text-teal-600 hover:text-teal-700"
+                                >
+                                  {t("accountingBank.match")}
+                                </button>
+                              )}
+                              <button
+                                onClick={() =>
+                                  clinic &&
+                                  deleteTx.mutate({
+                                    id: tx.id,
+                                    clinicId: clinic.clinicId,
+                                    actorId: clinic.clinicStaffId,
+                                    direction: tx.direction,
+                                    amount: tx.amount,
+                                  })
+                                }
+                                className="shrink-0 text-gray-400 hover:text-red-500"
+                              >
+                                ✕
+                              </button>
+                            </>
                           )}
-                          <button
-                            onClick={() => deleteTx.mutate(tx.id)}
-                            className="shrink-0 text-gray-400 hover:text-red-500"
-                          >
-                            ✕
-                          </button>
                         </div>
 
                         {isMatched && (
@@ -373,10 +423,21 @@ export function AccountingBankPage() {
                                 <button
                                   key={c.id}
                                   onClick={async () => {
+                                    if (!clinic) return;
                                     if (tx.direction === "in") {
-                                      await matchTx.mutateAsync({ id: tx.id, paymentId: c.id });
+                                      await matchTx.mutateAsync({
+                                        id: tx.id,
+                                        paymentId: c.id,
+                                        clinicId: clinic.clinicId,
+                                        actorId: clinic.clinicStaffId,
+                                      });
                                     } else {
-                                      await matchTx.mutateAsync({ id: tx.id, expenseId: c.id });
+                                      await matchTx.mutateAsync({
+                                        id: tx.id,
+                                        expenseId: c.id,
+                                        clinicId: clinic.clinicId,
+                                        actorId: clinic.clinicStaffId,
+                                      });
                                     }
                                     setMatchingId(null);
                                   }}

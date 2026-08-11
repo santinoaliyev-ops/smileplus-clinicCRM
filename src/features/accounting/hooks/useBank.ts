@@ -3,6 +3,7 @@ import {
   bankService,
   type CreateBankAccountInput,
   type CreateBankTransactionInput,
+  type DeleteBankTransactionContext,
 } from "@/shared/api/accounting/bank.service";
 
 export function useBankAccounts(clinicId: string | undefined) {
@@ -17,7 +18,8 @@ export function useBankAccounts(clinicId: string | undefined) {
 export function useCreateBankAccount(clinicId: string | undefined) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: CreateBankAccountInput) => bankService.createAccount(clinicId!, input),
+    mutationFn: ({ actorId, input }: { actorId: string; input: CreateBankAccountInput }) =>
+      bankService.createAccount(clinicId!, actorId, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bank-accounts", clinicId] });
     },
@@ -46,7 +48,8 @@ export function useCreateBankTransaction(bankAccountId: string | undefined) {
 export function useDeleteBankTransaction(bankAccountId: string | undefined) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => bankService.deleteTransaction(id),
+    mutationFn: ({ id, ...ctx }: { id: string } & DeleteBankTransactionContext) =>
+      bankService.deleteTransaction(id, ctx),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bank-transactions", bankAccountId] });
     },
@@ -56,8 +59,22 @@ export function useDeleteBankTransaction(bankAccountId: string | undefined) {
 export function useMatchBankTransaction(bankAccountId: string | undefined) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, paymentId, expenseId }: { id: string; paymentId?: string; expenseId?: string }) =>
-      paymentId ? bankService.matchToPayment(id, paymentId) : bankService.matchToExpense(id, expenseId!),
+    mutationFn: ({
+      id,
+      paymentId,
+      expenseId,
+      clinicId,
+      actorId,
+    }: {
+      id: string;
+      paymentId?: string;
+      expenseId?: string;
+      clinicId: string;
+      actorId: string;
+    }) =>
+      paymentId
+        ? bankService.matchToPayment(id, paymentId, clinicId, actorId)
+        : bankService.matchToExpense(id, expenseId!, clinicId, actorId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bank-transactions", bankAccountId] });
     },
@@ -67,7 +84,8 @@ export function useMatchBankTransaction(bankAccountId: string | undefined) {
 export function useUnmatchBankTransaction(bankAccountId: string | undefined) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => bankService.unmatch(id),
+    mutationFn: ({ id, clinicId, actorId }: { id: string; clinicId: string; actorId: string }) =>
+      bankService.unmatch(id, clinicId, actorId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bank-transactions", bankAccountId] });
     },

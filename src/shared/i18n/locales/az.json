@@ -421,6 +421,7 @@
     "reject": "Rədd et",
     "confirmReject": "Rədd etməni təsdiqlə",
     "rejectionReasonPlaceholder": "Rədd səbəbi",
+    "periodClosedError": "Dövr bağlıdır — dəyişiklik mümkün deyil",
     "status": {
       "pending": "Təsdiq gözləyir",
       "approved": "Təsdiqləndi",
@@ -494,6 +495,41 @@
       "out": "Məxaric",
       "balance": "Qalıq",
       "unmatchedCount": "Uyğunlaşdırılmayıb: {{count}}"
+    },
+    "periodClosedError": "Dövr bağlıdır — dəyişiklik mümkün deyil"
+  },
+  "accountingPeriodClosing": {
+    "title": "Dövrün bağlanması",
+    "close": "Dövrü bağla",
+    "cannotCloseFuture": "Cari və ya gələcək ayı bağlamaq olmaz",
+    "alreadyClosed": "Bu ay artıq bağlanıb",
+    "empty": "Hələ bağlanmış dövr yoxdur",
+    "columns": {
+      "month": "Ay",
+      "closedBy": "Bağlayan",
+      "closedAt": "Nə vaxt"
+    }
+  },
+  "accountingAuditLog": {
+    "title": "Audit jurnalı",
+    "empty": "Qeyd yoxdur",
+    "entityTypes": {
+      "expense": "Xərc",
+      "doctor_payout_rate": "Ödəniş sxemi",
+      "bank_account": "Bank hesabı",
+      "bank_transaction": "Bank əməliyyatı",
+      "finance_settings": "Parametrlər",
+      "closed_period": "Dövrün bağlanması"
+    },
+    "actions": {
+      "create": "Yaradılma",
+      "update": "Dəyişdirilmə",
+      "delete": "Silinmə",
+      "approve": "Təsdiqləmə",
+      "reject": "Rədd etmə",
+      "match": "Uyğunlaşdırma",
+      "unmatch": "Uyğunlaşdırmanın ləğvi",
+      "close": "Dövrün bağlanması"
     }
   },
   "adminDashboard": {

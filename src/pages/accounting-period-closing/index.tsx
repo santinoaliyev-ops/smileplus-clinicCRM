@@ -1,0 +1,1 @@
+export { AccountingPeriodClosingPage } from "./AccountingPeriodClosingPage";

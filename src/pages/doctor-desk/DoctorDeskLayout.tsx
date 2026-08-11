@@ -39,6 +39,8 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
     { icon: "💸", key: "expenses",      path: "/accounting/expenses", active: true, title: t("accountingExpenses.title") },
     { icon: "🧮", key: "payouts",       path: "/accounting/payouts",  active: true, title: t("accountingPayouts.title") },
     { icon: "🏦", key: "bank",          path: "/accounting/bank",     active: true, title: t("accountingBank.title") },
+    { icon: "📜", key: "auditLog",      path: "/accounting/audit-log", active: true, title: t("accountingAuditLog.title") },
+    { icon: "🔒", key: "periodClosing", path: "/accounting/period-closing", active: true, title: t("accountingPeriodClosing.title") },
     { icon: "💬", key: "messages",      path: null,        active: false, title: t("common.comingSoon") },
     { icon: "🔔", key: "notifications", path: null,        active: false, title: t("common.comingSoon") },
   ];
@@ -71,6 +73,8 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
     { icon: "💸", key: "expenses",      path: "/accounting/expenses",  active: true, title: t("accountingExpenses.title") },
     { icon: "🧮", key: "payouts",       path: "/accounting/payouts",   active: true, title: t("accountingPayouts.title") },
     { icon: "🏦", key: "bank",          path: "/accounting/bank",      active: true, title: t("accountingBank.title") },
+    { icon: "📜", key: "auditLog",      path: "/accounting/audit-log", active: true, title: t("accountingAuditLog.title") },
+    { icon: "🔒", key: "periodClosing", path: "/accounting/period-closing", active: true, title: t("accountingPeriodClosing.title") },
   ];
 
   const navItems = isDoctor

@@ -421,6 +421,7 @@
     "reject": "Reject",
     "confirmReject": "Confirm rejection",
     "rejectionReasonPlaceholder": "Rejection reason",
+    "periodClosedError": "Period is closed — changes not allowed",
     "status": {
       "pending": "Pending approval",
       "approved": "Approved",
@@ -494,6 +495,41 @@
       "out": "Outgoing",
       "balance": "Balance",
       "unmatchedCount": "Unmatched: {{count}}"
+    },
+    "periodClosedError": "Period is closed — changes not allowed"
+  },
+  "accountingPeriodClosing": {
+    "title": "Period closing",
+    "close": "Close period",
+    "cannotCloseFuture": "Cannot close the current or a future month",
+    "alreadyClosed": "This month is already closed",
+    "empty": "No closed periods yet",
+    "columns": {
+      "month": "Month",
+      "closedBy": "Closed by",
+      "closedAt": "When"
+    }
+  },
+  "accountingAuditLog": {
+    "title": "Audit log",
+    "empty": "No entries",
+    "entityTypes": {
+      "expense": "Expense",
+      "doctor_payout_rate": "Payout rate",
+      "bank_account": "Bank account",
+      "bank_transaction": "Bank transaction",
+      "finance_settings": "Settings",
+      "closed_period": "Period closing"
+    },
+    "actions": {
+      "create": "Create",
+      "update": "Update",
+      "delete": "Delete",
+      "approve": "Approve",
+      "reject": "Reject",
+      "match": "Match",
+      "unmatch": "Unmatch",
+      "close": "Close period"
     }
   },
   "adminDashboard": {

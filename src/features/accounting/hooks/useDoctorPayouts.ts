@@ -16,8 +16,15 @@ export function useDoctorPayoutRates(clinicId: string | undefined) {
 export function useUpdateDoctorPayoutRate(clinicId: string | undefined) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ doctorId, input }: { doctorId: string; input: UpdateDoctorPayoutRateInput }) =>
-      doctorPayoutsService.updateRate(doctorId, input),
+    mutationFn: ({
+      doctorId,
+      actorId,
+      input,
+    }: {
+      doctorId: string;
+      actorId: string;
+      input: UpdateDoctorPayoutRateInput;
+    }) => doctorPayoutsService.updateRate(doctorId, clinicId!, actorId, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["doctor-payout-rates", clinicId] });
     },

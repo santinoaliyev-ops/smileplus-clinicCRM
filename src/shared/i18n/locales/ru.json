@@ -421,6 +421,7 @@
     "reject": "Отклонить",
     "confirmReject": "Подтвердить отклонение",
     "rejectionReasonPlaceholder": "Причина отклонения",
+    "periodClosedError": "Период закрыт — изменения недоступны",
     "status": {
       "pending": "На согласовании",
       "approved": "Утверждён",
@@ -494,6 +495,41 @@
       "out": "Расход",
       "balance": "Остаток",
       "unmatchedCount": "Несопоставлено: {{count}}"
+    },
+    "periodClosedError": "Период закрыт — изменения недоступны"
+  },
+  "accountingPeriodClosing": {
+    "title": "Закрытие периода",
+    "close": "Закрыть период",
+    "cannotCloseFuture": "Нельзя закрыть текущий или будущий месяц",
+    "alreadyClosed": "Этот месяц уже закрыт",
+    "empty": "Закрытых периодов пока нет",
+    "columns": {
+      "month": "Месяц",
+      "closedBy": "Закрыл",
+      "closedAt": "Когда"
+    }
+  },
+  "accountingAuditLog": {
+    "title": "Аудит-лог",
+    "empty": "Записей нет",
+    "entityTypes": {
+      "expense": "Расход",
+      "doctor_payout_rate": "Ставка начисления",
+      "bank_account": "Банковский счёт",
+      "bank_transaction": "Банковская операция",
+      "finance_settings": "Настройки",
+      "closed_period": "Закрытие периода"
+    },
+    "actions": {
+      "create": "Создание",
+      "update": "Изменение",
+      "delete": "Удаление",
+      "approve": "Утверждение",
+      "reject": "Отклонение",
+      "match": "Сопоставление",
+      "unmatch": "Отмена сопоставления",
+      "close": "Закрытие периода"
     }
   },
   "adminDashboard": {

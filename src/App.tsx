@@ -30,6 +30,8 @@ import { AccountingDocumentsPage } from "@/pages/accounting-documents";
 import { AccountingExpensesPage } from "@/pages/accounting-expenses";
 import { AccountingPayoutsPage } from "@/pages/accounting-payouts";
 import { AccountingBankPage } from "@/pages/accounting-bank";
+import { AccountingAuditLogPage } from "@/pages/accounting-audit-log";
+import { AccountingPeriodClosingPage } from "@/pages/accounting-period-closing";
 
 export default function App() {
   return (
@@ -61,6 +63,8 @@ export default function App() {
           <Route path="/accounting/expenses" element={<AccountingExpensesPage />} />
           <Route path="/accounting/payouts" element={<AccountingPayoutsPage />} />
           <Route path="/accounting/bank" element={<AccountingBankPage />} />
+          <Route path="/accounting/audit-log" element={<AccountingAuditLogPage />} />
+          <Route path="/accounting/period-closing" element={<AccountingPeriodClosingPage />} />
         </Route>
 
         <Route path="/patients" element={<PatientListPage />} />

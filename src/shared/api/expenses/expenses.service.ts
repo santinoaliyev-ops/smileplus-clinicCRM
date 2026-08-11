@@ -1,4 +1,5 @@
 import { supabase } from "@/shared/lib/supabase";
+import { auditLogService } from "@/shared/api/accounting/audit-log.service";
 
 export type ExpenseCategory =
   | "rent"
@@ -43,6 +44,14 @@ export interface CreateExpenseInput {
   paymentMethod?: ExpensePaymentMethod | null;
   comment?: string | null;
   status: "pending" | "approved";
+  createdBy: string;
+}
+
+export interface RemoveExpenseContext {
+  clinicId: string;
+  actorId: string;
+  amount: number;
+  category: ExpenseCategory;
 }
 
 const num = (v: unknown): number =>
@@ -78,33 +87,50 @@ class ExpensesService {
   }
 
   async create(input: CreateExpenseInput): Promise<void> {
-    const { error } = await supabase.from("expenses").insert({
-      clinic_id: input.clinicId,
+    const { data, error } = await supabase
+      .from("expenses")
+      .insert({
+        clinic_id: input.clinicId,
+        category: input.category,
+        amount: input.amount,
+        expense_date: input.expenseDate,
+        vendor: input.vendor ?? null,
+        payment_method: input.paymentMethod ?? null,
+        comment: input.comment ?? null,
+        status: input.status,
+        created_by: input.createdBy,
+      })
+      .select("id")
+      .single();
+    if (error) throw error;
+
+    await auditLogService.log(input.clinicId, input.createdBy, "expense", data.id, "create", {
       category: input.category,
       amount: input.amount,
-      expense_date: input.expenseDate,
-      vendor: input.vendor ?? null,
-      payment_method: input.paymentMethod ?? null,
-      comment: input.comment ?? null,
-      status: input.status,
     });
-    if (error) throw error;
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string, ctx: RemoveExpenseContext): Promise<void> {
     const { error } = await supabase.from("expenses").delete().eq("id", id);
     if (error) throw error;
+
+    await auditLogService.log(ctx.clinicId, ctx.actorId, "expense", id, "delete", {
+      category: ctx.category,
+      amount: ctx.amount,
+    });
   }
 
-  async approve(id: string, approvedBy: string): Promise<void> {
+  async approve(id: string, clinicId: string, approvedBy: string): Promise<void> {
     const { error } = await supabase
       .from("expenses")
       .update({ status: "approved", approved_by: approvedBy, approved_at: new Date().toISOString() })
       .eq("id", id);
     if (error) throw error;
+
+    await auditLogService.log(clinicId, approvedBy, "expense", id, "approve");
   }
 
-  async reject(id: string, approvedBy: string, reason: string): Promise<void> {
+  async reject(id: string, clinicId: string, approvedBy: string, reason: string): Promise<void> {
     const { error } = await supabase
       .from("expenses")
       .update({
@@ -115,6 +141,8 @@ class ExpensesService {
       })
       .eq("id", id);
     if (error) throw error;
+
+    await auditLogService.log(clinicId, approvedBy, "expense", id, "reject", { reason });
   }
 }
 

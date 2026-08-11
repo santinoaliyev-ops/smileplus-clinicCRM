@@ -10,6 +10,7 @@ import {
   useRejectExpense,
 } from "@/features/accounting/hooks/useExpenses";
 import { useApprovalThreshold, useSetApprovalThreshold } from "@/features/accounting/hooks/useFinanceSettings";
+import { useClosedPeriods } from "@/features/accounting/hooks/usePeriodClosing";
 import type {
   ExpenseCategory,
   ExpensePaymentMethod,
@@ -73,6 +74,14 @@ export function AccountingExpensesPage() {
 
   const [rejectingId, setRejectingId] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState("");
+  const [periodBlockedError, setPeriodBlockedError] = useState(false);
+
+  const { data: closedPeriods = [] } = useClosedPeriods(clinic?.clinicId);
+  const closedMonthSet = useMemo(
+    () => new Set(closedPeriods.map((p) => p.periodMonth.slice(0, 7))),
+    [closedPeriods]
+  );
+  const isDateInClosedPeriod = (dateStr: string) => closedMonthSet.has(dateStr.slice(0, 7));
 
   const filtered = useMemo(
     () => (categoryFilter === "all" ? expenses : expenses.filter((e) => e.category === categoryFilter)),
@@ -83,7 +92,12 @@ export function AccountingExpensesPage() {
 
   const submit = async () => {
     const amount = parseFloat(form.amount);
-    if (!amount || amount <= 0) return;
+    if (!amount || amount <= 0 || !clinic) return;
+    if (isDateInClosedPeriod(form.expenseDate)) {
+      setPeriodBlockedError(true);
+      return;
+    }
+    setPeriodBlockedError(false);
     const status = threshold !== null && threshold !== undefined && amount > threshold ? "pending" : "approved";
     await createExpense.mutateAsync({
       category: form.category,
@@ -93,14 +107,19 @@ export function AccountingExpensesPage() {
       paymentMethod: form.paymentMethod,
       comment: form.comment || null,
       status,
+      createdBy: clinic.clinicStaffId,
     });
     setForm({ category: "other", amount: "", expenseDate: todayStr(), vendor: "", paymentMethod: "cash", comment: "" });
     setShowForm(false);
   };
 
   const saveThreshold = async () => {
+    if (!clinic) return;
     const value = thresholdInput.trim() === "" ? null : parseFloat(thresholdInput);
-    await setThreshold.mutateAsync(value !== null && !isNaN(value) ? value : null);
+    await setThreshold.mutateAsync({
+      value: value !== null && !isNaN(value) ? value : null,
+      actorId: clinic.clinicStaffId,
+    });
     setEditingThreshold(false);
   };
 
@@ -237,6 +256,11 @@ export function AccountingExpensesPage() {
               >
                 {t("common.cancel")}
               </button>
+              {periodBlockedError && (
+                <span className="self-center text-xs font-semibold text-red-500">
+                  {t("accountingExpenses.periodClosedError")}
+                </span>
+              )}
             </div>
           </div>
         )}
@@ -292,19 +316,33 @@ export function AccountingExpensesPage() {
                       {t(`accountingExpenses.status.${e.status}`)}
                     </span>
                     <span className="w-24 shrink-0 text-right text-sm font-bold text-gray-900">{e.amount} ₼</span>
-                    <button
-                      onClick={() => deleteExpense.mutate(e.id)}
-                      className="shrink-0 text-gray-400 hover:text-red-500"
-                    >
-                      ✕
-                    </button>
+                    {isDateInClosedPeriod(e.expenseDate) ? (
+                      <span className="shrink-0 text-gray-300" title={t("accountingExpenses.periodClosedError")}>
+                        🔒
+                      </span>
+                    ) : (
+                      <button
+                        onClick={() =>
+                          clinic &&
+                          deleteExpense.mutate({
+                            id: e.id,
+                            actorId: clinic.clinicStaffId,
+                            amount: e.amount,
+                            category: e.category,
+                          })
+                        }
+                        className="shrink-0 text-gray-400 hover:text-red-500"
+                      >
+                        ✕
+                      </button>
+                    )}
                   </div>
 
                   {e.status === "rejected" && e.rejectionReason && (
                     <div className="ml-24 text-xs text-red-500">{e.rejectionReason}</div>
                   )}
 
-                  {e.status === "pending" && isManager && (
+                  {e.status === "pending" && isManager && !isDateInClosedPeriod(e.expenseDate) && (
                     <div className="ml-24 flex items-center gap-2">
                       <button
                         onClick={() => approve(e.id)}
