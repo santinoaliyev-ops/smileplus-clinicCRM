@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { useClinic } from "@/app/providers/clinic";
 import { useAccountingInvoices } from "@/features/accounting/hooks/useAccountingInvoices";
+import { useExpenses } from "@/features/accounting/hooks/useExpenses";
 import { DoctorDeskLayout } from "@/pages/doctor-desk/DoctorDeskLayout";
 
 export function AccountingDashboardPage() {
@@ -11,6 +12,7 @@ export function AccountingDashboardPage() {
   const navigate = useNavigate();
   const { clinic } = useClinic();
   const { data: invoices = [], isLoading } = useAccountingInvoices(clinic?.clinicId);
+  const { data: expenses = [] } = useExpenses(clinic?.clinicId);
 
   const stats = useMemo(() => {
     const todayStr = new Date().toDateString();
@@ -27,14 +29,26 @@ export function AccountingDashboardPage() {
       }
     }
 
+    const expensesMonth = expenses
+      .filter((e) => new Date(e.expenseDate).getTime() >= monthStart)
+      .reduce((s, e) => s + e.amount, 0);
+
     const unpaid = invoices.filter((i) => i.status === "sent" && i.totalPaid === 0);
     const partial = invoices.filter((i) => i.status === "sent" && i.totalPaid > 0);
     const receivables = invoices
       .filter((i) => i.status !== "paid")
       .reduce((s, i) => s + i.remaining, 0);
 
-    return { revenueToday, revenueMonth, unpaidCount: unpaid.length, partialCount: partial.length, receivables };
-  }, [invoices]);
+    return {
+      revenueToday,
+      revenueMonth,
+      expensesMonth,
+      netMonth: revenueMonth - expensesMonth,
+      unpaidCount: unpaid.length,
+      partialCount: partial.length,
+      receivables,
+    };
+  }, [invoices, expenses]);
 
   const overdue = useMemo(
     () =>
@@ -49,6 +63,8 @@ export function AccountingDashboardPage() {
   const kpis = [
     { label: t("accountingDashboard.kpi.revenueToday"), value: `${stats.revenueToday} ₼` },
     { label: t("accountingDashboard.kpi.revenueMonth"), value: `${stats.revenueMonth} ₼` },
+    { label: t("accountingDashboard.kpi.expensesMonth"), value: `${stats.expensesMonth} ₼` },
+    { label: t("accountingDashboard.kpi.netMonth"), value: `${stats.netMonth} ₼`, danger: stats.netMonth < 0 },
     { label: t("accountingDashboard.kpi.receivables"), value: `${stats.receivables} ₼`, danger: stats.receivables > 0 },
     { label: t("accountingDashboard.kpi.unpaid"), value: stats.unpaidCount, danger: stats.unpaidCount > 0 },
     { label: t("accountingDashboard.kpi.partial"), value: stats.partialCount },
@@ -59,7 +75,7 @@ export function AccountingDashboardPage() {
       <div className="flex h-full flex-col gap-4 overflow-y-auto pb-4">
         <h1 className="text-xl font-extrabold text-gray-900">{t("accountingDashboard.title")}</h1>
 
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 xl:grid-cols-7">
           {kpis.map((k) => (
             <div key={k.label} className="rounded-2xl bg-white p-4 shadow-sm">
               <p className="text-xs text-gray-400">{k.label}</p>

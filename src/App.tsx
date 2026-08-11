@@ -27,6 +27,7 @@ import { AccountingDashboardPage } from "@/pages/accounting-dashboard";
 import { AccountingInvoicesPage } from "@/pages/accounting-invoices";
 import { AccountingReportsPage } from "@/pages/accounting-reports";
 import { AccountingDocumentsPage } from "@/pages/accounting-documents";
+import { AccountingExpensesPage } from "@/pages/accounting-expenses";
 
 export default function App() {
   return (
@@ -55,6 +56,7 @@ export default function App() {
           <Route path="/accounting/invoices" element={<AccountingInvoicesPage />} />
           <Route path="/accounting/reports" element={<AccountingReportsPage />} />
           <Route path="/accounting/documents" element={<AccountingDocumentsPage />} />
+          <Route path="/accounting/expenses" element={<AccountingExpensesPage />} />
         </Route>
 
         <Route path="/patients" element={<PatientListPage />} />

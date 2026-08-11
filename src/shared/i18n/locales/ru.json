@@ -383,6 +383,8 @@
     "kpi": {
       "revenueToday": "Выручка сегодня",
       "revenueMonth": "Выручка за месяц",
+      "expensesMonth": "Расходы за месяц",
+      "netMonth": "Остаток за месяц",
       "receivables": "Дебиторская задолженность",
       "unpaid": "Неоплаченных счетов",
       "partial": "Частично оплачено"
@@ -406,6 +408,31 @@
   },
   "accountingDocuments": {
     "title": "Финансовые документы"
+  },
+  "accountingExpenses": {
+    "title": "Расходы",
+    "add": "Добавить расход",
+    "empty": "Расходов нет",
+    "fields": {
+      "amount": "Сумма",
+      "vendor": "Поставщик",
+      "comment": "Комментарий"
+    },
+    "categories": {
+      "rent": "Аренда",
+      "salary": "Зарплата",
+      "doctorPayout": "Выплаты врачам",
+      "supplies": "Расходные материалы",
+      "lab": "Лаборатория",
+      "equipment": "Оборудование",
+      "repair": "Ремонт",
+      "utilities": "Коммунальные услуги",
+      "marketing": "Маркетинг",
+      "software": "Программное обеспечение",
+      "tax": "Налоги",
+      "bankFee": "Банковские комиссии",
+      "other": "Прочее"
+    }
   },
   "adminDashboard": {
     "title": "Главная",

@@ -383,6 +383,8 @@
     "kpi": {
       "revenueToday": "Bu günkü gəlir",
       "revenueMonth": "Aylıq gəlir",
+      "expensesMonth": "Aylıq xərclər",
+      "netMonth": "Aylıq qalıq",
       "receivables": "Debitor borcu",
       "unpaid": "Ödənilməmiş hesablar",
       "partial": "Qismən ödənilib"
@@ -406,6 +408,31 @@
   },
   "accountingDocuments": {
     "title": "Maliyyə sənədləri"
+  },
+  "accountingExpenses": {
+    "title": "Xərclər",
+    "add": "Xərc əlavə et",
+    "empty": "Xərc yoxdur",
+    "fields": {
+      "amount": "Məbləğ",
+      "vendor": "Təchizatçı",
+      "comment": "Şərh"
+    },
+    "categories": {
+      "rent": "Kirayə",
+      "salary": "Əmək haqqı",
+      "doctorPayout": "Həkimlərə ödənişlər",
+      "supplies": "Sərf materialları",
+      "lab": "Laboratoriya",
+      "equipment": "Avadanlıq",
+      "repair": "Təmir",
+      "utilities": "Kommunal xidmətlər",
+      "marketing": "Marketinq",
+      "software": "Proqram təminatı",
+      "tax": "Vergilər",
+      "bankFee": "Bank komissiyaları",
+      "other": "Digər"
+    }
   },
   "adminDashboard": {
     "title": "Əsas",

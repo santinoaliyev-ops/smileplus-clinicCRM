@@ -383,6 +383,8 @@
     "kpi": {
       "revenueToday": "Revenue today",
       "revenueMonth": "Revenue this month",
+      "expensesMonth": "Expenses this month",
+      "netMonth": "Net this month",
       "receivables": "Receivables",
       "unpaid": "Unpaid invoices",
       "partial": "Partially paid"
@@ -406,6 +408,31 @@
   },
   "accountingDocuments": {
     "title": "Financial documents"
+  },
+  "accountingExpenses": {
+    "title": "Expenses",
+    "add": "Add expense",
+    "empty": "No expenses",
+    "fields": {
+      "amount": "Amount",
+      "vendor": "Vendor",
+      "comment": "Comment"
+    },
+    "categories": {
+      "rent": "Rent",
+      "salary": "Salary",
+      "doctorPayout": "Doctor payouts",
+      "supplies": "Supplies",
+      "lab": "Lab",
+      "equipment": "Equipment",
+      "repair": "Repair",
+      "utilities": "Utilities",
+      "marketing": "Marketing",
+      "software": "Software",
+      "tax": "Tax",
+      "bankFee": "Bank fees",
+      "other": "Other"
+    }
   },
   "adminDashboard": {
     "title": "Home",

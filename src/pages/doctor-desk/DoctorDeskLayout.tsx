@@ -36,6 +36,7 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
     { icon: "⭐", key: "subscriptions", path: "/subscriptions", active: true, title: t("subscriptionsPage.title") },
     { icon: "📦", key: "documents",     path: "/documents",     active: true, title: t("documentsPage.title") },
     { icon: "🏷️", key: "services",      path: "/admin/services", active: true, title: t("adminServices.title") },
+    { icon: "💸", key: "expenses",      path: "/accounting/expenses", active: true, title: t("accountingExpenses.title") },
     { icon: "💬", key: "messages",      path: null,        active: false, title: t("common.comingSoon") },
     { icon: "🔔", key: "notifications", path: null,        active: false, title: t("common.comingSoon") },
   ];
@@ -65,6 +66,7 @@ export function DoctorDeskLayout({ children }: { children: ReactNode }) {
     { icon: "📊", key: "reports",       path: "/accounting/reports",   active: true, title: t("accountingReports.title") },
     { icon: "⭐", key: "subscriptions", path: "/subscriptions",        active: true, title: t("subscriptionsPage.title") },
     { icon: "📦", key: "documents",     path: "/accounting/documents", active: true, title: t("accountingDocuments.title") },
+    { icon: "💸", key: "expenses",      path: "/accounting/expenses",  active: true, title: t("accountingExpenses.title") },
   ];
 
   const navItems = isDoctor
