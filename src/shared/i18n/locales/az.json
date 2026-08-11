@@ -23,7 +23,8 @@
     "close": "Bağla",
     "back": "Geri",
     "more": "Daha",
-    "save": "Yadda saxla"
+    "save": "Yadda saxla",
+    "edit": "Redaktə et"
   },
   "doctorDesk": {
     "title": "Həkimin iş masası",
@@ -432,6 +433,22 @@
       "tax": "Vergilər",
       "bankFee": "Bank komissiyaları",
       "other": "Digər"
+    }
+  },
+  "accountingPayouts": {
+    "title": "Həkim ödənişləri",
+    "empty": "Həkim yoxdur",
+    "total": "Cəmi hesablanmış",
+    "columns": {
+      "doctor": "Həkim",
+      "collected": "Ay üzrə alınmış",
+      "scheme": "Ödəniş sxemi",
+      "accrued": "Hesablanmış"
+    },
+    "scheme": {
+      "percent": "Faiz",
+      "fixed": "Sabit",
+      "notConfigured": "Təyin edilməyib"
     }
   },
   "adminDashboard": {

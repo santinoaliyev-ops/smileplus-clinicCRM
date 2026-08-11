@@ -25,6 +25,7 @@ export interface CashierInvoice {
   status: "sent" | "paid";
   patientName: string | null;
   patientPhone: string;
+  doctorId: string | null;
   doctorName: string | null;
   totalAmount: number;
   coveredAmount: number;
@@ -76,6 +77,7 @@ class CashierService {
       status: inv.status,
       patientName: inv.patient?.full_name ?? null,
       patientPhone: inv.patient?.phone ?? "",
+      doctorId: inv.doctor?.id ?? null,
       doctorName: inv.doctor?.full_name ?? null,
       totalAmount: num(inv.total_amount),
       coveredAmount: num(inv.covered_amount),

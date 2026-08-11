@@ -23,7 +23,8 @@
     "close": "Close",
     "back": "Back",
     "more": "More",
-    "save": "Save"
+    "save": "Save",
+    "edit": "Edit"
   },
   "doctorDesk": {
     "title": "Doctor's desk",
@@ -432,6 +433,22 @@
       "tax": "Tax",
       "bankFee": "Bank fees",
       "other": "Other"
+    }
+  },
+  "accountingPayouts": {
+    "title": "Doctor payouts",
+    "empty": "No doctors",
+    "total": "Total accrued",
+    "columns": {
+      "doctor": "Doctor",
+      "collected": "Collected this month",
+      "scheme": "Payout scheme",
+      "accrued": "Accrued"
+    },
+    "scheme": {
+      "percent": "Percent",
+      "fixed": "Fixed",
+      "notConfigured": "Not configured"
     }
   },
   "adminDashboard": {
